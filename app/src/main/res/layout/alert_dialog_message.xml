@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loading"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_background"
+    android:padding="10dp">
+
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_14sdp"
+        android:textColor="#575757"
+        android:layout_marginTop="10dp"
+        android:text="Title" />
+
+    <com.mpcl.custom.RegularTextView
+        android:id="@+id/content_text"
+        android:text="Hello Text"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_14sdp"
+        android:textColor="#797979"
+        android:visibility="visible" />
+
+    <RelativeLayout
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+
+
+        <com.mpcl.custom.SemiBoldTextView
+            android:textSize="@dimen/_14sdp"
+            android:textColor="@color/colorPrimary"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/confirm_button"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="32dp"
+            android:layout_toLeftOf="@+id/cancel_button"
+            android:text="Ok" />
+
+        <com.mpcl.custom.SemiBoldTextView
+            android:id="@+id/cancel_button"
+            android:textSize="@dimen/_14sdp"
+            android:visibility="visible"
+            android:textColor="@color/colorPrimary"
+            android:text="Cancel"
+            android:layout_centerInParent="true"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" />
+    </RelativeLayout>
+</LinearLayout>

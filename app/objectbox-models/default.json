@@ -1,0 +1,124 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:2552638929264704989",
+      "lastPropertyId": "6:1140255309468224839",
+      "name": "RegistrationDB",
+      "properties": [
+        {
+          "id": "1:2890001874770497969",
+          "name": "Id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4746608604092441419",
+          "name": "fakeToken",
+          "type": 9
+        },
+        {
+          "id": "3:2576481200546565147",
+          "name": "empCode",
+          "type": 9
+        },
+        {
+          "id": "4:1569034540193358171",
+          "name": "empName",
+          "type": 9
+        },
+        {
+          "id": "5:1746811772427344272",
+          "name": "branchName",
+          "type": 9
+        },
+        {
+          "id": "6:1140255309468224839",
+          "name": "bid",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:1088264800597497296",
+      "lastPropertyId": "4:5276667263221136392",
+      "name": "EkartDB",
+      "properties": [
+        {
+          "id": "1:4014314481408073136",
+          "name": "Id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2340291440363785223",
+          "name": "srno",
+          "type": 9
+        },
+        {
+          "id": "3:2204621123453595158",
+          "name": "lcode",
+          "type": 9
+        },
+        {
+          "id": "4:5276667263221136392",
+          "name": "location",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:4788734499209731662",
+      "lastPropertyId": "2:2423851715955807433",
+      "name": "StockCheckingDB",
+      "properties": [
+        {
+          "id": "1:6195148959707120342",
+          "name": "Id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2423851715955807433",
+          "name": "bar_code",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:8512240064885993263",
+      "lastPropertyId": "2:1582968772186785636",
+      "name": "VechileData",
+      "properties": [
+        {
+          "id": "1:408587922667475231",
+          "name": "Id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1582968772186785636",
+          "name": "bar_code",
+          "type": 9
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "4:8512240064885993263",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="../../../../../../../layout/custom_preview.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_ac_copy_upload.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_barcode_scanning.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_device_setting.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_device_setup.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_ekart_location.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_fringer_print_login_main.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_location_scan.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_operation.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_option.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_pod_upload.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_sticker_print.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_sticker_printing.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_stock_checking.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_vehicle_load_upload.xml" value="0.3453125" />
+        <entry key="app/src/main/res/layout/item_sticker_list.xml" value="0.34479166666666666" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

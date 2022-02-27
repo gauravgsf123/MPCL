@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/_10sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_option"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:padding="@dimen/_10sdp"
+        android:gravity="center"
+        android:textSize="@dimen/_18sdp"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+
+    <com.mpcl.custom.RegularTextView
+        android:id="@+id/registration"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:background="@drawable/rectangle_with_cornor"
+        android:enabled="true"
+        android:gravity="center"
+        android:padding="@dimen/_10sdp"
+        android:text="@string/registration"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        />
+
+    <com.mpcl.custom.RegularTextView
+        android:id="@+id/attendance"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:background="@drawable/rectangle_with_cornor"
+        android:enabled="true"
+        android:gravity="center"
+        android:padding="@dimen/_10sdp"
+        android:text="@string/attendance"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registration"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

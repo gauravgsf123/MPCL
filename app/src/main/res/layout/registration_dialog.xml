@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="@dimen/_20sdp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/attendance"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:padding="@dimen/_10sdp"
+        android:gravity="center"
+        android:textSize="@dimen/_18sdp"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        android:orientation="vertical">
+        <com.mpcl.custom.RegularTextInputLayout
+            android:id="@+id/textInputLayoutCompanyId"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            app:errorEnabled="true"
+            android:layout_margin="@dimen/_2sdp"
+            android:hint="@string/company_id"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.mpcl.custom.RegularTextInputEditText
+                android:id="@+id/companyId"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textCapCharacters"
+                android:gravity="start|center"
+                android:maxLength="10"
+                android:focusable="false"
+                android:textSize="@dimen/_12sdp"
+                android:textDirection="anyRtl"
+                tools:text="MAXPACIFIC"/>
+
+        </com.mpcl.custom.RegularTextInputLayout>
+
+
+        <com.mpcl.custom.RegularTextInputLayout
+            android:id="@+id/textInputLayoutEmpCode"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_margin="@dimen/_2sdp"
+            android:hint="@string/emp_code"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCompanyId">
+            <com.mpcl.custom.RegularTextInputEditText
+                android:id="@+id/empCode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textCapCharacters"
+                android:maxLength="7"
+                android:textSize="@dimen/_12sdp"
+                tools:text="MAX0111"/>
+        </com.mpcl.custom.RegularTextInputLayout>
+
+        <com.mpcl.custom.RegularTextInputLayout
+            android:id="@+id/textInputLayoutName"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_margin="@dimen/_2sdp"
+            android:hint="@string/Name"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutEmpCode">
+            <com.mpcl.custom.RegularTextInputEditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textCapCharacters"
+                android:focusable="false"
+                android:textSize="@dimen/_12sdp"
+                tools:text="GAURAV KUMKAR"/>
+        </com.mpcl.custom.RegularTextInputLayout>
+
+        <com.mpcl.custom.RegularTextInputLayout
+            android:id="@+id/textInputLayoutBranch"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_margin="@dimen/_2sdp"
+            android:hint="@string/branch"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutName">
+            <com.mpcl.custom.RegularTextInputEditText
+                android:id="@+id/branch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textCapCharacters"
+                android:focusable="false"
+                android:textSize="@dimen/_12sdp"
+                tools:text="New Delhi"/>
+        </com.mpcl.custom.RegularTextInputLayout>
+
+        <com.mpcl.custom.RegularButton
+            android:id="@+id/next"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:backgroundTint="@color/colorPrimary"
+            android:drawableRight="@drawable/ic_arrow_forward"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            android:textSize="@dimen/_12sdp"
+            android:text="@string/vaerify_next"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutBranch"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

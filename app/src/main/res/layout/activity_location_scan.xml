@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mpcl.activity.operation.LocationScanActivity">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/toolbar" />
+
+    <com.mpcl.custom.BoldTextView
+        android:id="@+id/app_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_18sdp"
+        android:text="@string/location_scan"
+        android:gravity="center"
+        android:textColor="@color/colorPrimary"
+        android:padding="@dimen/_5sdp"
+        app:layout_constraintTop_toBottomOf="@+id/top_bar"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/app_title"
+        android:orientation="vertical">
+        <com.mpcl.custom.RegularTextInputLayout
+            android:id="@+id/textInputLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+            android:hint="@string/branch_name"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <AutoCompleteTextView
+                android:id="@+id/branchName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:hint="select branch"
+                android:textSize="@dimen/_12sdp"
+                android:gravity="start|center"
+                android:textDirection="anyRtl"
+                tools:text="123456"/>
+
+        </com.mpcl.custom.RegularTextInputLayout>
+
+
+        <com.mpcl.custom.RegularTextInputLayout
+            android:id="@+id/textInputLayoutBoxNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+            android:hint="@string/box_no"
+            android:focusable="false"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLocation">
+
+            <com.mpcl.custom.RegularTextInputEditText
+                android:id="@+id/boxNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:focusable="false"
+                tools:text="123456"/>
+        </com.mpcl.custom.RegularTextInputLayout>
+
+        <com.mpcl.custom.RegularTextInputLayout
+            android:id="@+id/textInputLayoutScanBy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+            android:hint="@string/scan_by"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutBoxNo">
+            <com.mpcl.custom.RegularTextInputEditText
+                android:id="@+id/scanBy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapCharacters"
+                android:focusable="false"
+                android:text="GAURAV KUMKAR"/>
+        </com.mpcl.custom.RegularTextInputLayout>
+
+
+        <com.mpcl.custom.RegularButton
+            android:id="@+id/save"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:visibility="gone"
+            android:backgroundTint="@color/colorPrimary"
+            android:drawableRight="@drawable/ic_arrow_forward"
+            android:textColor="@color/white"
+            android:text="@string/save"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutScanBy"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

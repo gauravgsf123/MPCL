@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1006137589397",
+    "project_id": "magix-app-315d2",
+    "storage_bucket": "magix-app-315d2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006137589397:android:2d513d7534aa3ae9cc259c",
+        "android_client_info": {
+          "package_name": "com.mpcl"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006137589397-dq8bvpf3it7237hlk1o7ch6ja5om2dm5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mpcl",
+            "certificate_hash": "71b311e911897f2f315c6217dd783772b0eb96a5"
+          }
+        },
+        {
+          "client_id": "1006137589397-uvuro0815fpu7i914bga86r0ljds663h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqC8Qh-g8Snp79DogiXzesrES6nNC7TTE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006137589397-uvuro0815fpu7i914bga86r0ljds663h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

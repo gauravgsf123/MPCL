@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mpcl.activity.operation.EkartLocationActivity">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/toolbar" />
+
+    <com.mpcl.custom.BoldTextView
+        android:id="@+id/app_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_18sdp"
+        android:text="@string/ekart"
+        android:gravity="center"
+        android:textColor="@color/colorPrimary"
+        android:padding="@dimen/_5sdp"
+        app:layout_constraintTop_toBottomOf="@+id/top_bar"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/_5sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_title">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardOutput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/_5sdp"
+            app:cardElevation="@dimen/_5sdp"
+            android:visibility="gone"
+            app:cardUseCompatPadding="true"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.mpcl.custom.BoldTextView
+                    android:id="@+id/slNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_30sdp"
+                    android:text="SL No. 5"
+                    android:gravity="center"
+                    android:padding="@dimen/_15sdp"
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toTopOf="parent"/>
+                <com.mpcl.custom.BoldTextView
+                    android:id="@+id/output"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_30sdp"
+                    android:text="Joginder Nagar"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:padding="@dimen/_15sdp"
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toBottomOf="@+id/slNo"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+        <com.mpcl.custom.RegularButton
+            android:id="@+id/scan"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_140sdp"
+            android:text="@string/scan"
+            android:textSize="@dimen/_30sdp"
+            android:layout_margin="@dimen/_10sdp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
