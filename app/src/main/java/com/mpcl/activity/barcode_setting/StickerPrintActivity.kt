@@ -28,7 +28,7 @@ import java.lang.Exception
 class StickerPrintActivity : BaseActivity(),View.OnClickListener {
     var TscDll = TSCActivity()
     private lateinit var binding:ActivityStickerPrintBinding
-    private lateinit var cNoteList:List<StickerDataResponseModel>
+    private var cNoteList= mutableListOf<StickerDataResponseModel>()
     private var cNote : StickerDataResponseModel?=null
     private lateinit var stickerDataRepository: StickerDataRepository
     private lateinit var stickerDataViewModel: StickerDataViewModel
@@ -58,13 +58,9 @@ class StickerPrintActivity : BaseActivity(),View.OnClickListener {
         binding.barCode.showSoftInputOnFocus = false
 
         binding.barCode.doOnTextChanged { text, start, count, after ->
-            // action which will be invoked when the text is changing
-            //showToast("01 "+binding.barCode.text.toString())
             if(!TextUtils.isEmpty(binding.barCode.text.toString().trim())){
                 if(findCNote(binding.barCode.text.toString())){
                     Log.d("barCode",binding.barCode.text.toString())
-
-                    //binding.barCode.setText(str)// = str
                     printBarCode()
                 }/*else{
                     SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
@@ -101,9 +97,9 @@ class StickerPrintActivity : BaseActivity(),View.OnClickListener {
             hideDialog()
             val responseModel = it ?: return@Observer
             Log.d(TAG,responseModel.toString())
-            cNoteList = responseModel
+            cNoteList = responseModel as MutableList<StickerDataResponseModel>
             (binding.rvStickerListRecyclerview.adapter as StickerPrintListAdapter).setItems(
-                responseModel
+                responseModel,this
             )
         })
     }
@@ -135,13 +131,23 @@ class StickerPrintActivity : BaseActivity(),View.OnClickListener {
 
     private fun findCNote(str: String): Boolean {
         var value = false
-
+        /*var list = mutableListOf<StickerDataResponseModel>()
+        list.addAll(cNoteList)*/
         cNoteList.forEach lit@ {
             if(it.BarCodeNo==str){
+                Log.d("printDone",it.printDone.toString())
                 value =true
                 cNote = it
                 it.printDone = true
+                var index = cNoteList.indexOf(it)
+                cNoteList[index] = it
+                Log.d("printDone",it.printDone.toString())
+                (binding.rvStickerListRecyclerview.adapter as StickerPrintListAdapter).setItems(
+                    cNoteList,this
+                )
+                Log.d("cNoteList",cNoteList.toString())
                 return@lit
+
             }
         }
 

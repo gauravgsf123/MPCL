@@ -79,7 +79,7 @@ class VehicleLoadUploadActivity : BaseActivity() {
             val mScanDocDataBody = mapOf<String, String>(
             "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!,
             "BID" to sharedPreference.getValueString(Constant.BID)!!,
-            "DOCNUMBER" to getDocumentNo(),//binding.documentNo.text.toString(),
+            "DOCNUMBER" to getDocumentNo(),
             "DOCTYPE" to sharedPreference.getValueString(Constant.DOCTYPE)!!
             )
             showDialog()
@@ -247,7 +247,7 @@ class VehicleLoadUploadActivity : BaseActivity() {
             val mScanDocDataBody = mapOf<String, String>(
                 "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!,
                 "BID" to sharedPreference.getValueString(Constant.BID)!!,
-                "DOCNUMBER" to getDocumentNo(),//binding.documentNo.text.toString(),
+                "DOCNUMBER" to getDocumentNo(),
                 "DOCTYPE" to docType
             )
             showDialog()
@@ -261,7 +261,7 @@ class VehicleLoadUploadActivity : BaseActivity() {
             setRecylatView()
             binding.type.isEnabled = false
             //binding.documentNo.isEnabled = false
-            enableDocument(false)
+            enableDocument(true)
             enableTrue = false
             binding.save.visibility = View.VISIBLE
             binding.submit.visibility = View.GONE
@@ -310,7 +310,7 @@ class VehicleLoadUploadActivity : BaseActivity() {
         val body = mapOf<String, String>(
             "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!,
             "BID" to sharedPreference.getValueString(Constant.BID)!!,
-            "DOCNUMBER" to getDocumentNo(),//binding.documentNo.text.toString(),
+            "DOCNUMBER" to getDocumentNo(),
             "DOCTYPE" to sharedPreference.getValueString(Constant.DOCTYPE)!!,
             "EMPNO" to sharedPreference.getValueString(Constant.EMP_NO)!!,
             "DATASTR" to jsonObj.toString()
@@ -422,7 +422,7 @@ class VehicleLoadUploadActivity : BaseActivity() {
         val mScanDocDataBody = mapOf<String, String>(
             "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!,
             "BID" to sharedPreference.getValueString(Constant.BID)!!,
-            "DOCNUMBER" to getDocumentNo(),//binding.documentNo.text.toString(),
+            "DOCNUMBER" to getDocumentNo(),
             "DOCTYPE" to docType
         )
         showDialog()
@@ -458,9 +458,26 @@ class VehicleLoadUploadActivity : BaseActivity() {
         binding.documentNo2.isEnabled = enable
         binding.documentNo3.isEnabled = enable
         binding.documentNo4.isEnabled = enable
+        if(enable) {
+            binding.documentNo1.setText("")
+            binding.documentNo2.setText("")
+            binding.documentNo3.setText("")
+            binding.documentNo4.setText("")
+        }
     }
 
     fun getDocumentNo():String{
-        return "${binding.documentNo1.text.toString()}/${binding.documentNo2.text.toString()}/${binding.documentNo3.text.toString()}${binding.documentNo4.text.toString()}"
+        var documentno = ""
+        when(docType!!){
+            "PRS"-> documentno= "${binding.documentNo1.text.toString()}/${binding.documentNo2.text.toString()}/${binding.documentNo3.text.toString()}${binding.documentNo4.text.toString()}"
+            "MFIN"->{
+                documentno= "${binding.documentNo4.text.toString()}"
+            }
+            "MFOUT"->{
+                documentno= "${binding.documentNo1.text.toString()}/${binding.documentNo2.text.toString()}/${binding.documentNo3.text.toString()}${binding.documentNo4.text.toString()}"
+            }
+            "DRS","DRS"-> documentno= "${binding.documentNo1.text.toString()}/${binding.documentNo2.text.toString()}/${binding.documentNo3.text.toString()}${binding.documentNo4.text.toString()}"
+        }
+       return documentno
     }
 }

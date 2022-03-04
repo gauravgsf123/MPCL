@@ -9,6 +9,6 @@ data class StickerDataResponseModel(@SerializedName("Response") var Response    
                                     @SerializedName("TotalBox") var TotalBox    : Int,
                                     @SerializedName("CNoteNo") var CNoteNo     : String,
                                     @SerializedName("BarCodeNo") var BarCodeNo   : String,
-                                    @SerializedName("Shortcode") var Shortcode   : String){
-    var printDone:Boolean=false
+                                    @SerializedName("Shortcode") var Shortcode   : String,
+                                    var printDone:Boolean=false){
 }
