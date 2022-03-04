@@ -66,6 +66,11 @@ class VehicleLoadUploadActivity : BaseActivity() {
 
             }
         }
+
+        val body = mapOf<String, String>(
+            "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!
+        )
+        vechileLoanUnloadViewModel.getDocTypeList(body)
         vechileDataBox = ObjectBox.boxStore.boxFor(VechileData::class.java)
         enableTrue = sharedPreference.getValueBoolean(Constant.VECHICLE_ENABLE,false)
         if(enableTrue){
@@ -76,20 +81,18 @@ class VehicleLoadUploadActivity : BaseActivity() {
             binding.textInputLayoutBoxNo.visibility = View.VISIBLE
             binding.linearLayout.visibility = View.VISIBLE
             binding.type.setText(sharedPreference.getValueString(Constant.VECHICLE_POSITION)!!)
+            docType = sharedPreference.getValueString(Constant.DOCTYPE)!!
             val mScanDocDataBody = mapOf<String, String>(
             "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!,
             "BID" to sharedPreference.getValueString(Constant.BID)!!,
-            "DOCNUMBER" to getDocumentNo(),
+            "DOCNUMBER" to  sharedPreference.getValueString(Constant.DOCUMENT)!!,
             "DOCTYPE" to sharedPreference.getValueString(Constant.DOCTYPE)!!
             )
             showDialog()
             vechileLoanUnloadViewModel.scanDocTotal(mScanDocDataBody)
         }else{
             showDialog()
-            val body = mapOf<String, String>(
-                "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!
-            )
-            vechileLoanUnloadViewModel.getDocTypeList(body)
+
             binding.type.isEnabled = true
             //binding.documentNo.isEnabled = true
             enableDocument(true)
@@ -106,16 +109,6 @@ class VehicleLoadUploadActivity : BaseActivity() {
             Log.d("JSON",finalJSON.toString())
             vechileLoanUnloadViewModel.uploadVehicleScan(finalJSON)
         }
-
-        /*showDialog()
-        val body = mapOf<String, String>(
-            "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!
-        )
-        vechileLoanUnloadViewModel.getDocTypeList(body)*/
-
-
-
-
 
         vechileLoanUnloadViewModel.docTypeListResponse.observe(this, Observer {
             hideDialog()
@@ -179,6 +172,7 @@ class VehicleLoadUploadActivity : BaseActivity() {
                     binding.textInputLayoutBoxNo.visibility = View.VISIBLE
                     binding.linearLayout.visibility = View.VISIBLE
                     sharedPreference.save(Constant.VECHICLE_ENABLE,enableTrue)
+                    sharedPreference.save(Constant.DOCUMENT,getDocumentNo())
                     binding.totalBox.setText(responseModel[0].TotalBox.toString())
                     binding.scanBox.setText(responseModel[0].ScanBox.toString())
 
@@ -259,7 +253,7 @@ class VehicleLoadUploadActivity : BaseActivity() {
         binding.reset.setOnClickListener {
             vechileDataBox?.removeAll()
             setRecylatView()
-            binding.type.isEnabled = false
+            binding.type.isEnabled = true
             //binding.documentNo.isEnabled = false
             enableDocument(true)
             enableTrue = false
@@ -269,15 +263,6 @@ class VehicleLoadUploadActivity : BaseActivity() {
             binding.linearLayout.visibility = View.GONE
             sharedPreference.save(Constant.VECHICLE_ENABLE,enableTrue)
         }
-
-
-
-
-
-
-        /*val traderType  = listOf("Buyer", "Seller", "Buyer & Seller ")
-        val traderTypeAdapter = ArrayAdapter(this, R.layout.drop_down_list_item, traderType)
-        binding.type.setAdapter(traderTypeAdapter)*/
     }
 
     private fun showHide(isShow:Boolean){
@@ -315,17 +300,6 @@ class VehicleLoadUploadActivity : BaseActivity() {
             "EMPNO" to sharedPreference.getValueString(Constant.EMP_NO)!!,
             "DATASTR" to jsonObj.toString()
         )
-
-        //https://www.maxpacific.org/Magix/rest/operation/mVehicleScan.htm?CID=MAXPACIFIC&BID=6&DOCNUMBER=202122/GGN/MF0001209&DOCTYPE=MFOUT&EMPNO=MAX0111&DATASTR={%22CID%22:%22MAXPACIFIC%22,%22data%22:[{%22scan_code%22:%225012345678900%22},{%22scan_code%22:%22036000291452%22},{%22scan_code%22:%22036000291452%22}]}
-
-
-        /*HeaderObj.put("CID", sharedPreference.getValueString(Constant.COMPANY_ID))
-        HeaderObj.put("BID", sharedPreference.getValueString(Constant.BID))
-        HeaderObj.put("EMPNO", sharedPreference.getValueString(Constant.EMP_NO))
-        HeaderObj.put("MOBILENO", sharedPreference.getValueString(Constant.MOBILE))
-        HeaderObj.put("IMEINO", getDeviceIMEIId(this).toString())
-        HeaderObj.put("data", jsonArrayT1)*/
-        //Log.d(TAG, "json_data : " + HeaderObj)
         return body
     }
 

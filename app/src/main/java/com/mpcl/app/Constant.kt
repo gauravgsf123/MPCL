@@ -3,6 +3,7 @@ package com.mpcl.app
 class Constant {
     companion object {
 
+        const val DOCUMENT = "document_no"
         const val INTENT_TYPE: String="intent_type"
         //const val BASE_URL = "https://www.maxpacific.org/Magix/rest/"
         const val BASE_URL = "http://122.160.175.215/Magix/rest/"

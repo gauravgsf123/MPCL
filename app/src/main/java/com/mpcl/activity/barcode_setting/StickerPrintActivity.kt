@@ -62,17 +62,7 @@ class StickerPrintActivity : BaseActivity(),View.OnClickListener {
                 if(findCNote(binding.barCode.text.toString())){
                     Log.d("barCode",binding.barCode.text.toString())
                     printBarCode()
-                }/*else{
-                    SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Wrong Carton Scan")
-                        .setContentText(binding.barCode.text.toString())
-                        .setConfirmButton("ok", SweetAlertDialog.OnSweetClickListener {
-                            it.dismiss()
-                            if(isCamera)
-                                startScanning()
-                            //startScanning()
-                        }).show()
-                }*/
+                }
             }
 
 
@@ -134,7 +124,7 @@ class StickerPrintActivity : BaseActivity(),View.OnClickListener {
         /*var list = mutableListOf<StickerDataResponseModel>()
         list.addAll(cNoteList)*/
         cNoteList.forEach lit@ {
-            if(it.BarCodeNo==str){
+            if(it.BarCodeNo.trim()==str.trim()){
                 Log.d("printDone",it.printDone.toString())
                 value =true
                 cNote = it
