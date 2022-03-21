@@ -137,24 +137,33 @@
         </LinearLayout>
 
 
-        <com.mpcl.custom.RegularTextInputLayout
-            android:id="@+id/textInputLayoutBoxNo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_2sdp"
-            android:focusable="false"
-            android:hint="@string/box_no"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/llDocumentNo">
 
-            <com.mpcl.custom.RegularTextInputEditText
+
+            <com.mpcl.custom.RegularEditText
                 android:id="@+id/boxNo"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:focusable="false"
+                android:background="@drawable/edittext_background"
+                app:layout_constraintTop_toBottomOf="@+id/llDocumentNo"
+                android:drawableRight="@drawable/ic_barcode_scanner"
                 android:inputType="textCapCharacters"
+                android:layout_margin="@dimen/_10sdp"
+                android:padding="@dimen/_5sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iv_print"
                 tools:text="GAURAV KUMKAR" />
-        </com.mpcl.custom.RegularTextInputLayout>
+
+        <ImageView
+            android:id="@+id/iv_print"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:layout_constraintBottom_toBottomOf="@+id/boxNo"
+            app:layout_constraintTop_toTopOf="@+id/boxNo"/>
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -163,7 +172,7 @@
             android:layout_margin="@dimen/_2sdp"
             android:orientation="horizontal"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutBoxNo">
+            app:layout_constraintTop_toBottomOf="@+id/boxNo">
 
             <com.mpcl.custom.RegularTextInputLayout
                 android:id="@+id/textInputLayoutTotalBox"
@@ -213,7 +222,7 @@
             android:drawableRight="@drawable/ic_arrow_forward"
             android:text="@string/check"
             android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/boxNo" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -233,7 +242,7 @@
             <LinearLayout
                 android:id="@+id/linearLayoutOne"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/totalScan">
 
@@ -245,12 +254,22 @@
                     android:text="SL No." />
 
                 <com.mpcl.custom.SemiBoldTextView
-                    android:id="@+id/scan_code"
-                    android:layout_width="match_parent"
+                    android:id="@+id/c_note"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="@dimen/_5sdp"
-                    android:text="Scaned Code" />
+                    android:text="C Note" />
+
+                <com.mpcl.custom.SemiBoldTextView
+                    android:id="@+id/scan_code"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="Scan Code" />
 
             </LinearLayout>
 

@@ -94,5 +94,7 @@ interface Api
     @GET("setup/mApiVersion.htm")
     suspend fun checkAppVersion(@QueryMap cid: Map<String, String>): List<AppVersionResponse>
 
+    @POST("operation/mVehicleData.htm")
+    suspend fun getVehicleDataList(@QueryMap loginMap: Map<String, String>): List<VehicleResponseModel>
 
 }

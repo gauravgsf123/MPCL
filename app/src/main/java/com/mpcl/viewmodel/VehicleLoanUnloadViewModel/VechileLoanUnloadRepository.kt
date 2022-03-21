@@ -1,10 +1,7 @@
 package com.mpcl.viewmodel.VehicleLoanUnloadViewModel
 
 import com.mpcl.employee.Network.RetrofitBuilder
-import com.mpcl.model.APIResponse
-import com.mpcl.model.DocTypeListResponseModel
-import com.mpcl.model.ScanDocDataResponseModel
-import com.mpcl.model.ScanDocTotalResponseModel
+import com.mpcl.model.*
 
 class VechileLoanUnloadRepository {
 
@@ -15,4 +12,6 @@ class VechileLoanUnloadRepository {
     suspend fun scanDocTotal(body:Map<String,String>):List<ScanDocTotalResponseModel> = RetrofitBuilder.api.scanDocTotal(body)
 
     suspend fun uploadVehicleScan(body:Map<String,String>):List<APIResponse> = RetrofitBuilder.api.uploadVehicleScan(body)
+
+    suspend fun getVehicleDataList(body:Map<String,String>):List<VehicleResponseModel> = RetrofitBuilder.api.getVehicleDataList(body)
 }

@@ -10,11 +10,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -63,6 +65,7 @@ class AcCopyUploadActivity : BaseActivity(),View.OnClickListener {
     private lateinit var barCodeViewModelFactory: BarCodeViewModelFactory
     private lateinit var binding: ActivityAcCopyUploadBinding
     private var intentType:String?=null
+    private var isCamera = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAcCopyUploadBinding.inflate(layoutInflater)
@@ -99,9 +102,9 @@ class AcCopyUploadActivity : BaseActivity(),View.OnClickListener {
         barCodeViewModel.responseBarCode.observe(this, androidx.lifecycle.Observer {
             hideDialog()
             val responseModel = it ?: return@Observer
-            if (responseModel.size > 0) {
-                Log.d(TAG, responseModel.get(0).Response.toString())
-                if (responseModel.get(0).Response.toString().equals("Success")) {
+            if (responseModel.isNotEmpty()) {
+                Log.d(TAG, responseModel[0].Response.toString())
+                if (responseModel[0].Response.toString() == "Success") {
                     SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText(getString(R.string.success))
                         .setContentText(getString(R.string.congrats_data_successful_uploaded))
@@ -127,6 +130,12 @@ class AcCopyUploadActivity : BaseActivity(),View.OnClickListener {
 
 
         })
+
+        binding.barCode.doOnTextChanged { text, start, count, after ->
+            if(!TextUtils.isEmpty(binding.barCode.text.toString().trim())){
+
+            }
+        }
     }
 
 
