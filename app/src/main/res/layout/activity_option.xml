@@ -6,10 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start"
-    tools:context="com.mpcl.activity.OptionActivity">
+    tools:context="com.mpcl.activity.OptionActivity"
+    tools:openDrawer="start">
 
-    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -27,10 +27,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/colorPrimary"
-                android:contentInsetEnd="0dp"
-                android:contentInsetLeft="0dp"
-                android:contentInsetRight="0dp"
                 android:contentInsetStart="0dp"
+                android:contentInsetLeft="0dp"
+                android:contentInsetEnd="0dp"
+                android:contentInsetRight="0dp"
                 app:contentInsetEnd="0dp"
                 app:contentInsetLeft="0dp"
                 app:contentInsetRight="0dp"
@@ -46,22 +46,21 @@
                         android:id="@+id/ivHamburgerMenu"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="match_parent"
-                        android:src="@drawable/menu_icon"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/_10sdp"
                         android:rotation="180"
-                        android:layout_marginRight="@dimen/_10sdp"/>
+                        android:src="@drawable/menu_icon" />
 
                     <com.mpcl.custom.BoldTextView
                         android:id="@+id/appBarTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_14sdp"
-                        android:gravity="center"
                         android:layout_centerVertical="true"
-                        android:text="@string/app_name"
-                        />
+                        android:gravity="center"
+                        android:text="@string/magix"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_14sdp" />
                 </RelativeLayout>
 
             </androidx.appcompat.widget.Toolbar>
@@ -70,114 +69,172 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            android:background="@drawable/background"
-            app:layout_constraintTop_toBottomOf="@+id/appBar"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBar">
+
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardAttendance"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:id="@+id/cv_webview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
                 app:cardCornerRadius="@dimen/_10sdp"
                 app:cardUseCompatPadding="true"
-                app:cardBackgroundColor="#33512DA8"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/cardOperation">
-                <com.mpcl.custom.RegularTextView
-                    android:id="@+id/tvAttendance"
+                app:layout_constraintEnd_toStartOf="@+id/cv_pickup"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="@dimen/_32sdp"
-                    android:gravity="center"
-                    android:textColor="@color/colorPrimary"
-                    android:text="@string/attedance"/>
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/_60sdp"
+                        android:layout_height="@dimen/_60sdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/webview" />
+
+                    <com.mpcl.custom.RegularTextView
+                        android:id="@+id/tv_webview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/_10sdp"
+                        android:text="@string/webview"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_16sdp" />
+                </LinearLayout>
+
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardOperation"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:id="@+id/cv_pickup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
                 app:cardCornerRadius="@dimen/_10sdp"
                 app:cardUseCompatPadding="true"
-                app:cardBackgroundColor="#3314D7EC"
-                app:layout_constraintTop_toBottomOf="@+id/cardAttendance"
-                app:layout_constraintBottom_toTopOf="@+id/cardTracking">
-                <com.mpcl.custom.RegularTextView
-                    android:id="@+id/tvOperation"
+                app:layout_constraintEnd_toStartOf="@+id/cv_todo"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/cv_webview"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="@dimen/_32sdp"
-                    android:gravity="center"
-                    android:textColor="@color/colorPrimary"
-                    android:text="@string/operation"/>
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/_60sdp"
+                        android:layout_height="@dimen/_60sdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/pickup" />
+
+                    <com.mpcl.custom.RegularTextView
+                        android:id="@+id/tv_pickup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/_10sdp"
+                        android:text="@string/pickup"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_16sdp" />
+
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardTracking"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:id="@+id/cv_todo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
                 app:cardCornerRadius="@dimen/_10sdp"
                 app:cardUseCompatPadding="true"
-                app:cardBackgroundColor="#33D32F2F"
-                app:layout_constraintTop_toBottomOf="@+id/cardOperation"
-                app:layout_constraintBottom_toBottomOf="parent">
-                <com.mpcl.custom.RegularTextView
-                    android:id="@+id/tvTracking"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/cv_pickup"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="@dimen/_32sdp"
-                    android:gravity="center"
-                    android:textColor="@color/colorPrimary"
-                    android:text="@string/tracking"/>
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/_60sdp"
+                        android:layout_height="@dimen/_60sdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/todo" />
+
+                    <com.mpcl.custom.RegularTextView
+                        android:id="@+id/tv_todo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/_10sdp"
+                        android:text="@string/todo"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_16sdp" />
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBar"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBar">
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/mpcl_logo"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_40sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                android:src="@drawable/mpcl_logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/tv_register_to" />
 
             <com.mpcl.custom.BoldTextView
                 android:id="@+id/tv_register_to"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/register_to"
                 android:gravity="center"
+                android:text="@string/register_to"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toTopOf="@+id/tv_user_name"/>
+                app:layout_constraintBottom_toTopOf="@+id/tv_user_name" />
 
             <com.mpcl.custom.SemiBoldTextView
                 android:id="@+id/tv_user_name"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Gaurav Kumar"
-                android:gravity="center"
-                android:padding="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toTopOf="@+id/tv_mobile"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_mobile"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Gaurav Kumar" />
 
             <com.mpcl.custom.SemiBoldTextView
                 android:id="@+id/tv_mobile"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="7011351424"
-                android:gravity="center"
-                android:textColor="@color/black"
+                android:layout_marginStart="@dimen/_2sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tv_user_name"
+                tools:text=" : 7011351424" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
     </LinearLayout>
@@ -190,8 +247,9 @@
         android:background="@color/white"
         android:fitsSystemWindows="false"
         app:headerLayout="@layout/nav_header_landing_new"
-        app:itemTextColor="@color/text_color"
-        app:itemTextAppearance="@style/NavigationDrawerStyle">
+        app:itemTextAppearance="@style/NavigationDrawerStyle"
+        app:itemTextColor="@color/text_color">
+
         <ExpandableListView
             android:id="@+id/expandableListView"
             android:layout_width="match_parent"

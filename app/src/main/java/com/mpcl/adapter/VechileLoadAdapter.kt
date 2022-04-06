@@ -10,13 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mpcl.R
 import com.mpcl.custom.RegularTextView
 import com.mpcl.custom.SemiBoldTextView
+import com.mpcl.database.VehicleListData
 import com.mpcl.model.VehicleResponseModel
 
 class VechileLoadAdapter : RecyclerView.Adapter<VechileLoadAdapter.MyViewHolder>() {
-    var itemClick: ((VehicleResponseModel) -> Unit)? = null
-    private var stockList = listOf<VehicleResponseModel>()
+    var itemClick: ((VehicleListData) -> Unit)? = null
+    private var stockList = listOf<VehicleListData>()
     private lateinit var context:Context
-    fun setItems(stockList: List<VehicleResponseModel>,context: Context) {
+    fun setItems(stockList: List<VehicleListData>,context: Context) {
         this.stockList = stockList
         this.context=context
         notifyDataSetChanged()
@@ -42,12 +43,12 @@ class VechileLoadAdapter : RecyclerView.Adapter<VechileLoadAdapter.MyViewHolder>
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var itemClick: ((VehicleResponseModel) -> Unit)? = null
+        var itemClick: ((VehicleListData) -> Unit)? = null
         private lateinit var slNo: SemiBoldTextView
         private lateinit var scanCode: RegularTextView
         private lateinit var cNote: RegularTextView
         private lateinit var linearLayout:LinearLayout
-        fun bindView(stock: VehicleResponseModel, i: Int, context: Context) {
+        fun bindView(stock: VehicleListData, i: Int, context: Context) {
             slNo = itemView.findViewById(R.id.sl_no)
             scanCode = itemView.findViewById(R.id.scan_code)
             cNote = itemView.findViewById(R.id.c_note)

@@ -54,6 +54,7 @@ import android.net.Uri
 import cn.pedant.SweetAlert.SweetAlertDialog
 import cn.pedant.SweetAlert.SweetAlertDialog.OnSweetClickListener
 import android.widget.Toast
+import com.mpcl.activity.barcode_setting.PickupScanActivity
 import java.lang.Exception
 import java.text.SimpleDateFormat
 
@@ -97,7 +98,7 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
         super.onCreate(savedInstanceState)
         binding = ActivityOptionBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.cardAttendance.setOnClickListener(this)
+        binding.cvWebview.setOnClickListener(this)
 
         registrationRepositoty = RegistrationRepositoty()
         registrationViewModelFactory = RegistrationViewModelFactory(registrationRepositoty)
@@ -116,7 +117,7 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
         })
 
         binding.tvUserName.text = sharedPreference.getValueString(Constant.FULL_NAME)
-        binding.tvMobile.text = sharedPreference.getValueString(Constant.MOBILE)
+        binding.tvMobile.text = ":  ${sharedPreference.getValueString(Constant.MOBILE)}"
 
 
         /*var ste = "2G-3155864640MNI/MNIDE03RSF9D"
@@ -403,7 +404,12 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onClick(p0: View?) {
-        customAlertView()
+        when(p0?.id){
+            binding.cvWebview?.id->{
+
+                startActivity(Intent(this,WebViewActivity::class.java))
+            }
+        }
     }
 
     private fun showBiometricPromptForEncryption() {
@@ -576,6 +582,9 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
                     getString(R.string.sticker_printing) -> {
                         startNewActivity(StickerPrintActivity())
                     }
+                    getString(R.string.pickup_scan) -> {
+                        startNewActivity(PickupScanActivity())
+                    }
 
                 }
 
@@ -689,6 +698,12 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
         childModelsList.add(childModel)
         childModel = MenuModel(
             getString(R.string.sticker_printing),
+            false,
+            false
+        )
+        childModelsList.add(childModel)
+        childModel = MenuModel(
+            getString(R.string.pickup_scan),
             false,
             false
         )

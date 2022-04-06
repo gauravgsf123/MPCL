@@ -10,6 +10,7 @@
         android:id="@+id/top_bar"
         layout="@layout/toolbar" />
 
+
     <com.mpcl.custom.BoldTextView
         android:id="@+id/app_title"
         android:layout_width="match_parent"
@@ -24,11 +25,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_margin="@dimen/_10sdp"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/app_title"
-        tools:layout_editor_absoluteX="13dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_title">
 
         <com.mpcl.custom.RegularTextInputLayout
             android:id="@+id/textInputLayoutType"
@@ -137,33 +138,30 @@
         </LinearLayout>
 
 
-
-
-            <com.mpcl.custom.RegularEditText
-                android:id="@+id/boxNo"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edittext_background"
-                app:layout_constraintTop_toBottomOf="@+id/llDocumentNo"
-                android:drawableRight="@drawable/ic_barcode_scanner"
-                android:inputType="textCapCharacters"
-                android:layout_margin="@dimen/_10sdp"
-                android:padding="@dimen/_5sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/iv_print"
-                tools:text="GAURAV KUMKAR" />
+        <com.mpcl.custom.RegularEditText
+            android:id="@+id/boxNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:background="@drawable/edittext_background"
+            android:drawableRight="@drawable/ic_barcode_scanner"
+            android:inputType="textCapCharacters"
+            android:padding="@dimen/_5sdp"
+            app:layout_constraintEnd_toStartOf="@+id/iv_print"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llDocumentNo"
+            tools:text="GAURAV KUMKAR" />
 
         <ImageView
             android:id="@+id/iv_print"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
-            android:src="@drawable/ic_camera"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintEnd_toEndOf="parent"
-
             android:layout_marginEnd="@dimen/_10sdp"
+            android:src="@drawable/ic_camera"
             app:layout_constraintBottom_toBottomOf="@+id/boxNo"
-            app:layout_constraintTop_toTopOf="@+id/boxNo"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintTop_toTopOf="@+id/boxNo" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -227,7 +225,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/save">
 
             <com.mpcl.custom.BoldTextView
@@ -256,8 +256,8 @@
                 <com.mpcl.custom.SemiBoldTextView
                     android:id="@+id/c_note"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:padding="@dimen/_5sdp"
                     android:text="C Note" />
@@ -265,8 +265,8 @@
                 <com.mpcl.custom.SemiBoldTextView
                     android:id="@+id/scan_code"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:padding="@dimen/_5sdp"
                     android:text="Scan Code" />
@@ -283,12 +283,13 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/stockListRecyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:nestedScrollingEnabled="true"
+                android:layout_height="0dp"
+                android:layout_marginBottom="@dimen/_25sdp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@+id/divider"
+                app:layout_constraintBottom_toBottomOf="parent"
                 tools:listitem="@layout/stock_checking_list_item" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -299,28 +300,30 @@
         android:id="@+id/reset"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_40sdp"
-        android:backgroundTint="@color/colorPrimary"
-        android:drawableRight="@drawable/ic_arrow_forward"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:backgroundTint="@color/gray"
+        android:drawablePadding="@dimen/_10sdp"
+        android:drawableRight="@drawable/ic_reset"
         android:text="@string/new_scan"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toStartOf="@+id/submit"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:textColor="@color/sky_blue"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <com.mpcl.custom.RegularButton
         android:id="@+id/submit"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_40sdp"
-        android:backgroundTint="@color/colorPrimary"
-        android:drawableRight="@drawable/ic_arrow_forward"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:backgroundTint="@color/gray"
+        android:drawableRight="@drawable/ic_submit"
         android:text="@string/submit"
-        android:textColor="@color/white"
+        android:paddingStart="@dimen/_15sdp"
+        android:drawablePadding="@dimen/_10sdp"
+        android:textColor="@color/green"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/reset"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
-        tools:layout_editor_absoluteY="673dp" />
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

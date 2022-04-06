@@ -14,13 +14,17 @@
         <entry key="app/src/main/res/layout/activity_location_scan.xml" value="0.34479166666666666" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.34479166666666666" />
         <entry key="app/src/main/res/layout/activity_operation.xml" value="0.34479166666666666" />
-        <entry key="app/src/main/res/layout/activity_option.xml" value="0.34479166666666666" />
+        <entry key="app/src/main/res/layout/activity_option.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_pickup_scan.xml" value="0.2453125" />
         <entry key="app/src/main/res/layout/activity_pod_upload.xml" value="0.34479166666666666" />
-        <entry key="app/src/main/res/layout/activity_sticker_print.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_sticker_print.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_sticker_printing.xml" value="0.34479166666666666" />
         <entry key="app/src/main/res/layout/activity_stock_checking.xml" value="0.34479166666666666" />
-        <entry key="app/src/main/res/layout/activity_vehicle_load_upload.xml" value="0.3453125" />
+        <entry key="app/src/main/res/layout/activity_vehicle_load_upload.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/activity_web_view.xml" value="0.2453125" />
+        <entry key="app/src/main/res/layout/item_pickup_scan_list.xml" value="0.2453125" />
         <entry key="app/src/main/res/layout/item_sticker_list.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/stock_checking_list_item.xml" value="0.2453125" />
       </map>
     </option>
   </component>

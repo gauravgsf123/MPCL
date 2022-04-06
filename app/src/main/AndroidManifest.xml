@@ -17,9 +17,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
-
     <application
-        android:name="com.mpcl.app.MyApp"
+        android:name=".app.MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -30,38 +29,44 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.mpcl.activity.barcode_setting.StickerPrintActivity"
+            android:name=".activity.barcode_setting.PickupScanActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.barcode_setting.StickerPrintActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name="com.mpcl.activity.barcode_setting.DeviceSetupActivity"
+            android:name=".activity.barcode_setting.DeviceSetupActivity"
             android:exported="true" />
         <activity
-            android:name="com.mpcl.activity.barcode_setting.StickerPrintingActivity"
+            android:name=".activity.barcode_setting.StickerPrintingActivity"
             android:exported="true" />
         <activity
-            android:name="com.mpcl.activity.barcode_setting.DeviceSettingActivity"
+            android:name=".activity.barcode_setting.DeviceSettingActivity"
             android:exported="true" />
-        <activity android:name="com.mpcl.activity.operation.LocationScanActivity" />
+        <activity android:name=".activity.operation.LocationScanActivity" />
         <activity
-            android:name="com.mpcl.activity.operation.StockCheckingActivity"
+            android:name=".activity.operation.StockCheckingActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name="com.mpcl.activity.operation.VehicleLoadUploadActivity" />
-        <activity android:name="com.mpcl.activity.operation.EkartLocationActivity" />
+        <activity android:name=".activity.operation.VehicleLoadUploadActivity" />
+        <activity android:name=".activity.operation.EkartLocationActivity" />
         <activity
-            android:name="com.mpcl.activity.operation.AcCopyUploadActivity"
+            android:name=".activity.operation.AcCopyUploadActivity"
             android:screenOrientation="sensorLandscape" />
-        <activity android:name="com.mpcl.activity.PodUploadActivity" />
-        <activity android:name="com.mpcl.activity.OperationActivity" />
-        <activity android:name="com.mpcl.activity.FringerPrintLoginMainActivity" />
-        <activity android:name="com.mpcl.activity.OptionActivity" />
-        <activity android:name="com.mpcl.activity.RegistrationActivity" />
-        <activity android:name="com.mpcl.activity.DashboardActivity" />
+        <activity android:name=".activity.PodUploadActivity" />
+        <activity android:name=".activity.OperationActivity" />
+        <activity android:name=".activity.FringerPrintLoginMainActivity" />
+        <activity android:name=".activity.OptionActivity" />
+        <activity android:name=".activity.RegistrationActivity" />
+        <activity android:name=".activity.DashboardActivity" />
         <activity
-            android:name="com.mpcl.activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name="com.mpcl.activity.SplashActivity"
+            android:name=".activity.SplashActivity"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -69,13 +74,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.mpcl.MainActivity" />
+        <activity android:name=".MainActivity" />
         <activity
-            android:name="com.mpcl.util.qr_scanner.BarcodeScanningActivity"
+            android:name=".util.qr_scanner.BarcodeScanningActivity"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/FullScreenTheme" />
         <activity
-            android:name="com.mpcl.util.qr_scanner.QRcodeScanningActivity"
+            android:name=".util.qr_scanner.QRcodeScanningActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/FullScreenTheme" />
 

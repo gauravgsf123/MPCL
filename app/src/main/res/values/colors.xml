@@ -14,6 +14,7 @@
     <color name="green_light">#004000</color>
     <color name="red_light">#420304</color>
     <color name="blue">#253359</color>
+    <color name="sky_blue">#2196F3</color>
 
     <color name="barcode_reticle_background">#99000000</color>
     <color name="barcode_reticle_stroke">#ffffff</color>

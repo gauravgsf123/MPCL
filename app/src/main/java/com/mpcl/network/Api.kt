@@ -97,4 +97,5 @@ interface Api
     @POST("operation/mVehicleData.htm")
     suspend fun getVehicleDataList(@QueryMap loginMap: Map<String, String>): List<VehicleResponseModel>
 
+
 }
