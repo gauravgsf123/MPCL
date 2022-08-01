@@ -18,6 +18,25 @@ class MyApp:Application() {
     override fun onCreate() {
         super.onCreate()
         app = this
+        application = this
         ObjectBox.init(this)
     }
+
+    /*
+    * companion object {
+
+        lateinit var application: Application
+
+        fun getInstance(): Application {
+            return application
+        }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        application = this
+        PrefManager.init(applicationContext)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        // AppDatabase.invoke(applicationContext)
+    }*/
 }

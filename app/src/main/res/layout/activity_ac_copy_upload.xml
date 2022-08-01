@@ -44,7 +44,7 @@
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_170sdp"
+                    android:layout_height="wrap_content"
                     app:cardCornerRadius="@dimen/_5sdp"
                     app:cardElevation="@dimen/_5sdp"
                     app:cardUseCompatPadding="true">
@@ -68,6 +68,8 @@
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 android:textSize="@dimen/_12sdp"
                                 android:padding="@dimen/_5sdp"
+                                android:textIsSelectable="true"
+                                android:inputType="none"
                                 android:textColor="@color/black"
                                 android:background="@drawable/edittext_background"
                                 android:hint="@string/bar_code"
@@ -120,7 +122,22 @@
 
                             </RelativeLayout>
 
+
+
                         </androidx.constraintlayout.widget.ConstraintLayout>
+                        <com.mpcl.custom.RegularTextView
+                            android:id="@+id/tvCalender"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            tools:text="22/07/2022"
+                            android:visibility="gone"
+                            android:padding="@dimen/_5sdp"
+                            android:textSize="@dimen/_18sdp"
+                            android:textColor="@color/black"
+                            android:gravity="start|center"
+                            android:layout_margin="@dimen/_5sdp"
+                            android:drawableRight="@drawable/calendar"
+                            android:background="@drawable/edittext_background"/>
 
                     </LinearLayout>
 

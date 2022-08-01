@@ -1,11 +1,14 @@
 package com.mpcl.activity.barcode_setting
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
@@ -44,6 +47,7 @@ class StickerPrintActivity : BaseActivity(),View.OnClickListener {
         Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStickerPrintBinding.inflate(layoutInflater)
@@ -55,7 +59,24 @@ class StickerPrintActivity : BaseActivity(),View.OnClickListener {
         setupUI()
         setObserver()
 
-        binding.barCode.showSoftInputOnFocus = false
+        //binding.barCode.showSoftInputOnFocus = false
+
+        binding.barCode.setOnTouchListener { v, event ->
+            v.onTouchEvent(event)
+            val inputMethod: InputMethodManager =
+                v.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (inputMethod != null) {
+                inputMethod.hideSoftInputFromWindow(v.windowToken, 0)
+            }
+            true
+        }
+
+        binding.barCode.setOnFocusChangeListener {
+                view, b ->
+            val inputMethod: InputMethodManager =
+                view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if(b) inputMethod.hideSoftInputFromWindow(view.windowToken, 0)
+        }
 
         binding.barCode.doOnTextChanged { text, start, count, after ->
             if(!TextUtils.isEmpty(binding.barCode.text.toString().trim())){
@@ -64,8 +85,6 @@ class StickerPrintActivity : BaseActivity(),View.OnClickListener {
                     printBarCode()
                 }
             }
-
-
         }
 
     }
@@ -221,6 +240,7 @@ class StickerPrintActivity : BaseActivity(),View.OnClickListener {
             TscDll.printerfont(350, 260, "4", 0, 1, 1, cNote?.Shortcode)
             TscDll.printerfont(10, 310, "3", 0, 1, 1, cNote?.Consignee)
             TscDll.printerfont(10, 360, "3", 0, 1, 1, cNote?.Destination)
+            TscDll.printerfont(350, 360, "4", 0, 1, 1, cNote?.Location.toString())
             TscDll.printlabel(1, 1)
             TscDll.closeport(5000)
         } catch (ex: Exception) {
@@ -236,7 +256,7 @@ class StickerPrintActivity : BaseActivity(),View.OnClickListener {
                 binding.barCode.setText("")
             })
             .show()*/
-        showToast("${cNote?.BarCodeNo} Barcode Print Done")
+        showToast("BarCode : ${cNote?.BarCodeNo} \n Barcode Print Done")
         binding.barCode.setText("")
         if(isCamera) startScanning()
 

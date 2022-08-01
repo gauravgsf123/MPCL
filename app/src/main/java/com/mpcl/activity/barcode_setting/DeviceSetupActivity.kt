@@ -71,6 +71,7 @@ class DeviceSetupActivity : BaseActivity() {
             TscDll.printerfont(350, 260, "4", 0, 1, 1, "XXX-XXX")
             TscDll.printerfont(10, 310, "3", 0, 1, 1, "Testing Print")
             TscDll.printerfont(10, 360, "3", 0, 1, 1, "Testing Print")
+            TscDll.printerfont(350, 360, "4", 0, 1, 1, "TEST")
             TscDll.printlabel(1, 1)
             TscDll.closeport(5000)
         } catch (ex: Exception) {

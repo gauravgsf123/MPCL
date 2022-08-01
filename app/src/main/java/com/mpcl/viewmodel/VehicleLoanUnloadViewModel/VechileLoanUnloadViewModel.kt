@@ -11,8 +11,9 @@ class VechileLoanUnloadViewModel (var vechileLoanUnloadRepository: VechileLoanUn
     var docTypeListResponse : MutableLiveData<List<DocTypeListResponseModel>> = MutableLiveData()
     var scanDocDataResponse : MutableLiveData<List<ScanDocDataResponseModel>> = MutableLiveData()
     var scanDocTotalResponse : MutableLiveData<List<ScanDocTotalResponseModel>> = MutableLiveData()
-    var uploadVehicleScanResponse : MutableLiveData<List<APIResponse>> = MutableLiveData()
+    var uploadVehicleScanResponse : MutableLiveData<List<ScanDocDataResponseModel>> = MutableLiveData()
     var vehicleResponseModel : MutableLiveData<List<VehicleResponseModel>> = MutableLiveData()
+    var sendExtraScanResponse : MutableLiveData<List<SendExtraScanResponseModel>> = MutableLiveData()
 
     fun getDocTypeList(body:Map<String,String>){
         viewModelScope.launch(){
@@ -40,20 +41,38 @@ class VechileLoanUnloadViewModel (var vechileLoanUnloadRepository: VechileLoanUn
         }
     }
 
-    fun uploadVehicleScan(body:Map<String,String>){
+    fun sendExtraScan(body:Map<String,String>){
+        viewModelScope.launch(){
+            try {
+                val response = vechileLoanUnloadRepository.sendExtraScan(body)
+                sendExtraScanResponse.value = response
+            }catch (e: Exception){}
+        }
+    }
+
+    /*fun uploadVehicleScan(body:Map<String,String>){
         viewModelScope.launch(){
             try {
                 val response = vechileLoanUnloadRepository.uploadVehicleScan(body)
                 uploadVehicleScanResponse.value = response
             }catch (e: Exception){}
         }
-    }
+    }*/
 
     fun getVehicleDataList(body:Map<String,String>){
         viewModelScope.launch(){
             try {
                 val response = vechileLoanUnloadRepository.getVehicleDataList(body)
                 vehicleResponseModel.value = response
+            }catch (e: Exception){}
+        }
+    }
+
+    fun uploadNewVehicleScan(vecicleloadRequst: VehicleLoadRequest) {
+        viewModelScope.launch(){
+            try {
+                val response = vechileLoanUnloadRepository.uploadNewVehicleScan(vecicleloadRequst)
+                uploadVehicleScanResponse.value = response
             }catch (e: Exception){}
         }
     }

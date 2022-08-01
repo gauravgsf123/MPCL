@@ -1,7 +1,10 @@
 package com.mpcl.activity.operation
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -13,6 +16,7 @@ import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -28,6 +32,7 @@ import com.mpcl.app.Constant
 import com.mpcl.app.ManagePermissions
 import com.mpcl.databinding.ActivityAcCopyUploadBinding
 import com.mpcl.model.IntentDataModel
+import com.mpcl.util.Utils
 import com.mpcl.util.qr_scanner.BarcodeScanningActivity
 import com.mpcl.viewmodel.barCodeViewModel.BarCodeRepository
 import com.mpcl.viewmodel.barCodeViewModel.BarCodeViewModel
@@ -66,10 +71,16 @@ class AcCopyUploadActivity : BaseActivity(),View.OnClickListener {
     private lateinit var binding: ActivityAcCopyUploadBinding
     private var intentType:String?=null
     private var isCamera = false
+    private var minDate = "20/07/2022"
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAcCopyUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        barCodeRepository =  BarCodeRepository()
+        barCodeViewModelFactory = BarCodeViewModelFactory(barCodeRepository)
+        barCodeViewModel = ViewModelProvider(this, barCodeViewModelFactory).get(BarCodeViewModel::class.java)
         /*val toolbar = findViewById(R.id.toolbar) as Toolbar?
         setSupportActionBar(toolbar)
         val actionbar = supportActionBar
@@ -80,25 +91,51 @@ class AcCopyUploadActivity : BaseActivity(),View.OnClickListener {
         binding.imgBarCode.setOnClickListener(this)
         binding.btnPhoto.setOnClickListener(this)
         binding.btnUpdate.setOnClickListener(this)
+        binding.tvCalender.setOnClickListener(this)
 
         intentDataModel = intent.getParcelableExtra(Constant.INTENT_TYPE)
         Log.d(TAG, intentDataModel?.type.toString() + " : " + intentDataModel?.value)
         if(intentDataModel?.value!=null){
             binding.barCode.setText(intentDataModel?.value)
+            if(intentDataModel?.type==2){
+                getLimitDate(intentDataModel?.value!!)
+            }
         }
-        if(intentDataModel?.type!=0){
-            if(intentDataModel?.type==1)
-            binding.title.text = "A/C Copy Upload"
-            else binding.title.text = "Pod Upload"
-        }
-       /* intent.getData("result")?.let{
-                Log.d(TAG, it)
-            binding.barCode.setText(it)
-            }*/
 
-        barCodeRepository =  BarCodeRepository()
-        barCodeViewModelFactory = BarCodeViewModelFactory(barCodeRepository)
-        barCodeViewModel = ViewModelProvider(this, barCodeViewModelFactory).get(BarCodeViewModel::class.java)
+        if(intentDataModel?.type!=0){
+            if(intentDataModel?.type==1){
+            binding.title.text = "A/C Copy Upload"}
+            else{ binding.title.text = "Pod Upload"}
+        }
+
+        binding.barCode.setOnTouchListener { v, event ->
+            v.onTouchEvent(event)
+            val inputMethod: InputMethodManager =
+                v.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (inputMethod != null) {
+                inputMethod.hideSoftInputFromWindow(v.windowToken, 0)
+            }
+            true
+        }
+
+        binding.barCode.setOnFocusChangeListener {
+                view, b ->
+            val inputMethod: InputMethodManager =
+                view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if(b) inputMethod.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+
+
+        setOnserver()
+
+        binding.barCode.doOnTextChanged { text, start, count, after ->
+            if(!TextUtils.isEmpty(binding.barCode.text.toString().trim())){
+
+            }
+        }
+    }
+
+    private fun setOnserver() {
         barCodeViewModel.responseBarCode.observe(this, androidx.lifecycle.Observer {
             hideDialog()
             val responseModel = it ?: return@Observer
@@ -110,8 +147,6 @@ class AcCopyUploadActivity : BaseActivity(),View.OnClickListener {
                         .setContentText(getString(R.string.congrats_data_successful_uploaded))
                         .setConfirmClickListener(object : SweetAlertDialog.OnSweetClickListener {
                             override fun onClick(sDialog: SweetAlertDialog) {
-                                // reuse previous dialog instance
-                                //onBackPressed()
                                 sDialog.dismiss()
                                 binding.imgSelfi.setImageResource(0);
                                 binding.imgSelfi.setBackgroundResource(R.drawable.ic_image_placeholder)
@@ -131,13 +166,26 @@ class AcCopyUploadActivity : BaseActivity(),View.OnClickListener {
 
         })
 
-        binding.barCode.doOnTextChanged { text, start, count, after ->
-            if(!TextUtils.isEmpty(binding.barCode.text.toString().trim())){
+        barCodeViewModel.responseLimitDate.observe(this, androidx.lifecycle.Observer {
+            hideDialog()
+            var response = it ?:return@Observer
+            binding.tvCalender.visibility = if(intentDataModel?.type==1)View.GONE else View.VISIBLE
+            minDate = response[0].DrsDate.toString()
+            binding.tvCalender.text = minDate
 
-            }
-        }
+        })
     }
 
+    private fun getLimitDate(docNumber: String) {
+        val mScanDocDataBody = mapOf<String, String>(
+            "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!,
+            "BID" to sharedPreference.getValueString(Constant.BID)!!,
+            "DOCNUMBER" to docNumber
+        )
+        showDialog()
+        Log.d(TAG,mScanDocDataBody.toString())
+        barCodeViewModel.getLimitDate(mScanDocDataBody)
+    }
 
 
     fun Intent.getData(key: String): String? {
@@ -163,9 +211,46 @@ class AcCopyUploadActivity : BaseActivity(),View.OnClickListener {
                 }
             }
             R.id.btnUpdate -> validateForm()
+            R.id.tvCalender->showCalender()
         }
     }
 
+    private fun showCalender(){
+        var mcurrentDate = Calendar.getInstance()
+        val mYear: Int = mcurrentDate.get(Calendar.YEAR)
+        val mMonth: Int = mcurrentDate.get(Calendar.MONTH)
+        val mDay: Int = mcurrentDate.get(Calendar.DAY_OF_MONTH)
+        val mDatePicker = DatePickerDialog(
+            this@AcCopyUploadActivity,
+            { datepicker, selectedyear, selectedmonth, selectedday ->
+                mcurrentDate.set(Calendar.YEAR, selectedyear)
+                mcurrentDate.set(Calendar.MONTH, selectedmonth)
+                mcurrentDate.set(
+                    Calendar.DAY_OF_MONTH,
+                    selectedday
+                )
+                val sdf = SimpleDateFormat(
+                    resources.getString(
+                        R.string.date_card_formate
+                    ),
+                    Locale.US
+                )
+                binding.tvCalender.text = sdf.format(
+                    mcurrentDate.time
+                )
+            }, mYear, mMonth, mDay
+        )
+        //mDatePicker.updateDate(Utils.getCurrentDate(""))
+        mDatePicker.setTitle(
+            resources.getString(
+                R.string.alert_date_select
+            )
+        )
+
+        mDatePicker.datePicker.maxDate = System.currentTimeMillis()
+        mDatePicker.datePicker.minDate = Utils.milliseconds(minDate)//mcurrentDate.timeInMillis
+        mDatePicker.show()
+    }
 
     private fun validateForm() {
         when{
@@ -233,7 +318,7 @@ class AcCopyUploadActivity : BaseActivity(),View.OnClickListener {
     }
 
     private fun customCompressImage(actualImage: File) {
-        actualImage?.let { imageFile ->
+        actualImage.let { imageFile ->
             lifecycleScope.launch {
                 compressedImage = Compressor.compress(this@AcCopyUploadActivity, imageFile) {
                     resolution(640, 480)
@@ -273,7 +358,7 @@ class AcCopyUploadActivity : BaseActivity(),View.OnClickListener {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(
-            "${sharedPreference.getValueString(Constant.COMPANY_ID)}_${intentDataModel?.value}_", /* prefix */
+            "${sharedPreference.getValueString(Constant.COMPANY_ID)}_${intentDataModel?.value}", /* prefix */
             ".jpg", /* suffix */
             storageDir /* directory */
         ).apply {
@@ -309,35 +394,38 @@ class AcCopyUploadActivity : BaseActivity(),View.OnClickListener {
 
             if(intentDataModel?.type==1){
                 showDialog()
-                val file = File(path)
-                Log.d(TAG,"image_name : ${file.name}")
+                val file = path?.let { File(it) }
+                Log.d(TAG,"image_name : ${file?.name}")
                 val filePart = MultipartBody.Part.createFormData(
                     "dataFile",
-                    file.name,
-                    RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                    file?.name,
+                    RequestBody.create("image/*".toMediaTypeOrNull(), file!!)
                 )
                 barCodeViewModel.uploadAcCopyData(
                     filePart,
                     sharedPreference.getValueString(Constant.COMPANY_ID)?.let { getPart(it) },
                     sharedPreference.getValueString(Constant.EMP_NO)?.let { getPart(it) },
                     sharedPreference.getValueString(Constant.MOBILE)?.let { getPart(it) },
+                    sharedPreference.getValueString(Constant.BID)?.let { getPart(it) },
                     getPart(binding.barCode.text.toString().trim()),
                     getDeviceId()?.let { getPart(it) }
                 )
             }else if(intentDataModel?.type==2){
                 showDialog()
-                val file = File(path)
+                val file = path?.let { File(it) }
                 val filePart = MultipartBody.Part.createFormData(
                     "dataFile",
-                    file.name,
-                    RequestBody.create("image/*".toMediaTypeOrNull(), file)
+                    file?.name,
+                    RequestBody.create("image/*".toMediaTypeOrNull(), file!!)
                 )
                 barCodeViewModel.uploadPODCopyData(
                     filePart,
                     sharedPreference.getValueString(Constant.COMPANY_ID)?.let { getPart(it) },
                     sharedPreference.getValueString(Constant.EMP_NO)?.let { getPart(it) },
                     sharedPreference.getValueString(Constant.MOBILE)?.let { getPart(it) },
+                    sharedPreference.getValueString(Constant.BID)?.let { getPart(it) },
                     getPart(binding.barCode.text.toString().trim()),
+                    getPart(binding.tvCalender.text.toString().trim()),
                     getDeviceId()?.let { getPart(it) }
                 )
             }

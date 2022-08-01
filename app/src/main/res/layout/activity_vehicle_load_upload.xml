@@ -147,6 +147,7 @@
             android:drawableRight="@drawable/ic_barcode_scanner"
             android:inputType="textCapCharacters"
             android:padding="@dimen/_5sdp"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/iv_print"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/llDocumentNo"
@@ -158,6 +159,7 @@
             android:layout_height="@dimen/_20sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:src="@drawable/ic_camera"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/boxNo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="1"
@@ -212,7 +214,7 @@
 
 
         <com.mpcl.custom.RegularButton
-            android:id="@+id/save"
+            android:id="@+id/check"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginTop="@dimen/_10sdp"
@@ -228,16 +230,55 @@
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/save">
+            app:layout_constraintTop_toBottomOf="@+id/check">
 
             <com.mpcl.custom.BoldTextView
                 android:id="@+id/totalScan"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="@dimen/_16sdp"
                 android:padding="@dimen/_5sdp"
-                android:text="Total Number of Scan : 0"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="0"
                 app:layout_constraintTop_toTopOf="parent" />
+            <com.mpcl.custom.BoldTextView
+                android:id="@+id/slash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="@dimen/_16sdp"
+                android:padding="@dimen/_5sdp"
+                android:text="/"
+                app:layout_constraintStart_toEndOf="@+id/totalScan"
+                app:layout_constraintTop_toTopOf="parent" />
+            <com.mpcl.custom.BoldTextView
+                android:id="@+id/scan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="@dimen/_16sdp"
+                android:padding="@dimen/_5sdp"
+                android:text="0"
+                app:layout_constraintStart_toEndOf="@+id/slash"
+                app:layout_constraintTop_toTopOf="parent" />
+            
+            <com.mpcl.custom.SemiBoldTextView
+                android:id="@+id/tv_scan_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_5sdp"
+                tools:text="@string/success"
+                android:gravity="start"
+                android:textStyle="bold"
+                android:textSize="@dimen/_18sdp"
+                app:layout_constraintBottom_toBottomOf="@+id/scan"
+                android:layout_marginStart="@dimen/_10sdp"
+                app:layout_constraintStart_toEndOf="@+id/scan"
+                app:layout_constraintTop_toTopOf="@+id/scan"/>
 
             <LinearLayout
                 android:id="@+id/linearLayoutOne"
@@ -288,7 +329,7 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@+id/divider"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:listitem="@layout/stock_checking_list_item" />
+                tools:listitem="@layout/item_vechicle_load_unload_list" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -308,6 +349,21 @@
         android:textColor="@color/sky_blue"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <com.mpcl.custom.RegularButton
+        android:id="@+id/view"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:backgroundTint="@color/gray"
+        android:drawablePadding="@dimen/_10sdp"
+        android:drawableRight="@drawable/ic_view"
+        android:text="@string/view"
+        android:textColor="@color/black"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/reset"
+        app:layout_constraintEnd_toStartOf="@+id/submit"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <com.mpcl.custom.RegularButton

@@ -8,33 +8,38 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.google.gson.Gson
 import com.mpcl.R
 import com.mpcl.adapter.VechileLoadAdapter
 import com.mpcl.database.ObjectBox
-import com.mpcl.database.VechileData
 import com.mpcl.app.BaseActivity
 import com.mpcl.app.Constant
 import com.mpcl.app.ManagePermissions
 import com.mpcl.database.*
 import com.mpcl.databinding.ActivityVehicleLoadUploadBinding
+import com.mpcl.databinding.DialogStatusViewListBinding
+import com.mpcl.model.VehicleLoadRequest
 import com.mpcl.model.VehicleResponseModel
 import com.mpcl.util.qr_scanner.QRcodeScanningActivity
 import com.mpcl.viewmodel.VehicleLoanUnloadViewModel.VechileLoanUnloadRepository
 import com.mpcl.viewmodel.VehicleLoanUnloadViewModel.VechileLoanUnloadViewModel
 import com.mpcl.viewmodel.VehicleLoanUnloadViewModel.VechileLoanUnloadViewModelFactory
 import io.objectbox.Box
-import org.json.JSONArray
-import org.json.JSONObject
+
+import com.mpcl.adapter.StatusViewListAdapter
+import com.mpcl.model.ScanDocTotalResponseModel
+
 
 class VehicleLoadUploadActivity : BaseActivity() {
     private lateinit var binding: ActivityVehicleLoadUploadBinding
-
+    private var totalLeftBox :Int?=0
     private val REQUEST_CAMERA_CAPTURE = 100
     private lateinit var managePermissions: ManagePermissions
     private var selectedScanningSDK = QRcodeScanningActivity.ScannerSDK.MLKIT
@@ -50,12 +55,14 @@ class VehicleLoadUploadActivity : BaseActivity() {
 
     private var valueList: MutableList<String> = mutableListOf()
     private var nameList: MutableList<String> = mutableListOf()
+    private var preFixList: MutableList<String> = mutableListOf()
     private lateinit var docType: String
     private var enableTrue: Boolean = false
     private var callOneTime: Boolean = false
     private var vechileDataBox: Box<VechileData>? = null
     private var vechileListDataBox: Box<VehicleListData>? = null
     private var isCamera = false
+    lateinit var dialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,54 +84,129 @@ class VehicleLoadUploadActivity : BaseActivity() {
         }
 
         getDoctype()
+        setObserver()
         enableTrue = sharedPreference.getValueBoolean(Constant.VECHICLE_ENABLE, false)
         if (enableTrue) {
             binding.type.isEnabled = false
             //binding.documentNo.isEnabled = false
             enableDocument(false)
-            binding.save.visibility = View.GONE
+            binding.check.visibility = View.GONE
             binding.boxNo.visibility = View.VISIBLE
             binding.ivPrint.visibility = View.VISIBLE
             binding.type.setText(sharedPreference.getValueString(Constant.VECHICLE_POSITION)!!)
             docType = sharedPreference.getValueString(Constant.DOCTYPE)!!
-            val mScanDocDataBody = mapOf<String, String>(
-                "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!,
-                "BID" to sharedPreference.getValueString(Constant.BID)!!,
-                "DOCNUMBER" to sharedPreference.getValueString(Constant.DOCUMENT)!!,
-                "DOCTYPE" to sharedPreference.getValueString(Constant.DOCTYPE)!!
-            )
-            showDialog()
-            vechileLoanUnloadViewModel.scanDocTotal(mScanDocDataBody)
-            vechileListDataBox?.let { setRecylatView(it.all) }
-            Log.d("vechileListDataBox",vechileListDataBox?.all?.size.toString())
+            //binding.documentNo4.setText(sharedPreference.getValueString(Constant.DOCUMENT)!!)
+            setDocumentNo()
+            vechileListDataBox?.let { it1 -> setRecylatView(it1?.all)}
+            binding.totalScan.text = "${sharedPreference.getValueInt(Constant.TOTAL_DOC)}"
         } else {
-            showDialog()
-
             binding.type.isEnabled = true
-            //binding.documentNo.isEnabled = true
             enableDocument(true)
-            binding.save.visibility = View.VISIBLE
-            binding.boxNo.visibility = View.VISIBLE
-            binding.ivPrint.visibility = View.VISIBLE
+            binding.check.visibility = View.VISIBLE
+            binding.boxNo.visibility = View.GONE
+            binding.ivPrint.visibility = View.GONE
+            vechileListDataBox?.let { it1 -> setRecylatView(it1?.all)}
         }
 
 
         binding.submit.setOnClickListener {
-            val finalJSON = getJSon(vechileDataBox?.all!!)
-            Log.d("JSON", finalJSON.toString())
-            vechileLoanUnloadViewModel.uploadVehicleScan(finalJSON)
+            showDialog(false)
+            getJSon(vechileDataBox?.all!!)
+            //vechileLoanUnloadViewModel.uploadVehicleScan(finalJSON)
         }
+
+
+        binding.type.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                val selected = parent.getItemAtPosition(position)
+                docType = valueList[position]
+                sharedPreference.save(Constant.VECHICLE_POSITION, nameList[position])
+                sharedPreference.save(Constant.DOCTYPE, docType)
+                when (docType!!) {
+                    /*"PRS" -> {
+                        showHide(true);binding.documentNo3.setText("PR")
+                    }*/
+                    "MFIN" -> {
+                        showHide(false)
+                    }
+                    /*"MFOUT" -> {
+                        showHide(true);binding.documentNo3.setText("MF")
+                    }
+                    "DRS", "DRS" -> {
+                        showHide(true);binding.documentNo3.setText("DR")
+                    }*/
+                    else ->{
+                        showHide(true); binding.documentNo3.setText(preFixList[position])
+                    }
+                }
+
+            }
+
+        binding.boxNo.doOnTextChanged { text, start, count, after ->
+            if (!TextUtils.isEmpty(binding.boxNo.text.toString().trim())) {
+                findDocumentNo(binding.boxNo.text.toString())
+            }
+        }
+
+        binding.ivPrint.setOnClickListener {
+            isCamera = true
+            managePermissions.checkPermissions()
+            selectedScanningSDK = QRcodeScanningActivity.ScannerSDK.MLKIT
+            startScanning()
+        }
+
+        binding.boxNo.setOnClickListener { isCamera = false }
+
+        binding.view.setOnClickListener{
+            callViewDocumentListAPI()
+        }
+
+
+        binding.check.setOnClickListener {
+            val mScanDocDataBody = mapOf<String, String>(
+                "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!,
+                "BID" to sharedPreference.getValueString(Constant.BID)!!,
+                "DOCNUMBER" to getDocumentNo(),
+                "DOCTYPE" to docType
+            )
+            showDialog()
+            callOneTime = false
+            Log.d(TAG, mScanDocDataBody.toString())
+            vechileLoanUnloadViewModel.getVehicleDataList(mScanDocDataBody)
+        }
+
+        binding.reset.setOnClickListener {
+            vechileDataBox?.removeAll()
+            binding.type.isEnabled = true
+            enableDocument(true)
+            enableTrue = false
+            binding.type.setText(resources.getString(R.string.select_option))
+
+            binding.check.visibility = View.VISIBLE
+            binding.submit.visibility = View.GONE
+            binding.boxNo.visibility = View.GONE
+            binding.ivPrint.visibility = View.GONE
+            sharedPreference.save(Constant.VECHICLE_ENABLE, enableTrue)
+            vechileListDataBox?.removeAll()
+            vechileListDataBox?.all?.let { setRecylatView(it) }
+            getDoctype()
+        }
+    }
+
+    private fun setObserver(){
 
         vechileLoanUnloadViewModel.docTypeListResponse.observe(this, Observer {
             hideDialog()
             val responseModel = it ?: return@Observer
             if (responseModel.isNotEmpty()) {
                 //responseModel[0].branch?.let { it1 -> Log.d(TAG, it1) }
-                    valueList.clear()
+                valueList.clear()
                 nameList.clear()
+                preFixList.clear()
                 for (branch in responseModel) {
                     valueList.add(branch.Value!!)
                     nameList.add(branch.Name!!)
+                    preFixList.add(branch.Prefix!!)
                 }
                 val traderTypeAdapter = ArrayAdapter(this, R.layout.drop_down_list_item, nameList)
                 binding.type.setAdapter(traderTypeAdapter)
@@ -136,8 +218,7 @@ class VehicleLoadUploadActivity : BaseActivity() {
                 )
             }
         })
-
-        vechileLoanUnloadViewModel.scanDocDataResponse.observe(this, Observer {
+        /*vechileLoanUnloadViewModel.scanDocDataResponse.observe(this, Observer {
             hideDialog()
             Log.d(TAG, it.toString())
             val responseModel = it ?: return@Observer
@@ -164,36 +245,19 @@ class VehicleLoadUploadActivity : BaseActivity() {
                     "Some thing wrong"
                 )
             }
-        })
+        })*/
 
         vechileLoanUnloadViewModel.scanDocTotalResponse.observe(this, Observer {
             hideDialog()
             val responseModel = it ?: return@Observer
             if (responseModel.isNotEmpty()) {
-                //if(!enableTrue){
-                binding.type.isEnabled = false
-                nameList.clear()
-                val traderTypeAdapter = ArrayAdapter(this, R.layout.drop_down_list_item, nameList)
-                binding.type.setAdapter(traderTypeAdapter)
-
-                enableDocument(false)
-                enableTrue = true
-                binding.save.visibility = View.GONE
-                binding.boxNo.visibility = View.VISIBLE
-                binding.ivPrint.visibility = View.VISIBLE
-                sharedPreference.save(Constant.VECHICLE_ENABLE, enableTrue)
-                sharedPreference.save(Constant.DOCUMENT, getDocumentNo())
-                binding.totalBox.setText(responseModel[0].TotalBox.toString())
-                binding.scanBox.setText(responseModel[0].ScanBox.toString())
-
-                // }
                 Log.d(TAG, responseModel.toString())
-
+                showList(responseModel)
 
             } else {
                 showError(
                     getString(R.string.opps),
-                    "Some thing wrong"
+                    "No Data Found"
                 )
             }
         })
@@ -209,7 +273,7 @@ class VehicleLoadUploadActivity : BaseActivity() {
             //binding.documentNo.isEnabled = false
             enableDocument(false)
             enableTrue = false
-            binding.save.visibility = View.VISIBLE
+            binding.check.visibility = View.VISIBLE
             binding.submit.visibility = View.GONE
             binding.boxNo.visibility = View.VISIBLE
             binding.ivPrint.visibility = View.VISIBLE
@@ -219,7 +283,16 @@ class VehicleLoadUploadActivity : BaseActivity() {
                 .setContentText("Data successfully uploaded on server")
                 .setConfirmButton("ok", SweetAlertDialog.OnSweetClickListener { sweetAlert ->
                     sweetAlert.dismiss()
-                    finish()
+                    val mScanDocDataBody = mapOf<String, String>(
+                        "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!,
+                        "BID" to sharedPreference.getValueString(Constant.BID)!!,
+                        "DOCNUMBER" to getDocumentNo(),
+                        "DOCTYPE" to docType
+                    )
+                    showDialog()
+                    callOneTime = false
+                    Log.d(TAG, mScanDocDataBody.toString())
+                    vechileLoanUnloadViewModel.getVehicleDataList(mScanDocDataBody)
                 })
                 .show()
         })
@@ -232,103 +305,58 @@ class VehicleLoadUploadActivity : BaseActivity() {
                 binding.type.isEnabled = false
                 enableDocument(false)
                 nameList.clear()
+                vechileListDataBox?.removeAll()
+                vechileDataBox?.removeAll()
                 val traderTypeAdapter = ArrayAdapter(this, R.layout.drop_down_list_item, nameList)
                 binding.type.setAdapter(traderTypeAdapter)
                 enableTrue = true
-                binding.save.visibility = View.GONE
+                binding.check.visibility = View.GONE
                 binding.boxNo.visibility = View.VISIBLE
                 binding.ivPrint.visibility = View.VISIBLE
+
                 sharedPreference.save(Constant.VECHICLE_ENABLE, enableTrue)
                 sharedPreference.save(Constant.DOCUMENT, getDocumentNo())
+                sharedPreference.save(Constant.TOTAL_DOC, responseModel.size)
+                binding.tvScanStatus.text = ""
                 responseModel.forEach {vehicle->
-                    vechileListDataBox?.put(VehicleListData(0,vehicle.Response,vehicle.Destination,vehicle.CNoteNo,vehicle.BarCodeNo))
+                    vechileListDataBox?.put(VehicleListData(0,vehicle.Response,vehicle.Destination,vehicle.CNoteNo,vehicle.BarCodeNo,vehicle.ChgWeight))
                 }
-                vechileListDataBox?.let { it1 -> setRecylatView(it1?.all) }
-                // }
-                Log.d(TAG, responseModel.toString())
+                vechileListDataBox?.let {
+                        it1 -> setRecylatView(it1?.all)
+                    binding.totalScan.text = "${it1.all.size}"
+                }
 
 
             } else {
                 showError(
                     getString(R.string.opps),
-                    "Some thing wrong"
+                    getString(R.string.data_not_available)
                 )
             }
         })
 
+        vechileLoanUnloadViewModel.sendExtraScanResponse.observe(this, Observer {
+            hideDialog()
+            val responseModel = it ?: return@Observer
+            Log.d("sendExtraScanResponse",responseModel.toString())
+        })
+    }
+
+    private fun showList(responseModel: List<ScanDocTotalResponseModel>) {
+
+        val alertDialog = AlertDialog.Builder(this@VehicleLoadUploadActivity)
+        val inflater = layoutInflater
+        val convertView: View = inflater.inflate(R.layout.dialog_status_view_list, null)
+        alertDialog.setView(convertView)
+        var binding = DialogStatusViewListBinding.bind(convertView)
+        binding.rvStatusViewList.adapter = StatusViewListAdapter()
+        (binding.rvStatusViewList.adapter as StatusViewListAdapter).setItems(
+            responseModel,this
+        )
 
 
-
-        binding.type.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, _, position, _ ->
-                val selected = parent.getItemAtPosition(position)
-                docType = valueList[position]
-                sharedPreference.save(Constant.VECHICLE_POSITION, nameList[position])
-                sharedPreference.save(Constant.DOCTYPE, docType)
-                Log.d(TAG, docType!!)
-                when (docType!!) {
-                    "PRS" -> {
-                        showHide(true);binding.documentNo3.setText("PR")
-                    }
-                    "MFIN" -> {
-                        showHide(false)
-                    }
-                    "MFOUT" -> {
-                        showHide(true);binding.documentNo3.setText("MF")
-                    }
-                    "DRS", "DRS" -> {
-                        showHide(true);binding.documentNo3.setText("DR")
-                    }
-                }
-
-            }
-
-        binding.boxNo.doOnTextChanged { text, start, count, after ->
-            if (!TextUtils.isEmpty(binding.boxNo.text.toString().trim())) {
-                findDocumentNo(binding.boxNo.text.toString())
-            }
-        }
-
-        binding.ivPrint.setOnClickListener {
-            isCamera = true
-            managePermissions.checkPermissions()
-            selectedScanningSDK = QRcodeScanningActivity.ScannerSDK.MLKIT
-            startScanning()
-        }
-
-        binding.boxNo.setOnClickListener { isCamera = false }
-
-
-
-        binding.save.setOnClickListener {
-            val mScanDocDataBody = mapOf<String, String>(
-                "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!,
-                "BID" to sharedPreference.getValueString(Constant.BID)!!,
-                "DOCNUMBER" to getDocumentNo(),
-                "DOCTYPE" to docType
-            )
-            showDialog()
-            callOneTime = false
-            Log.d(TAG, mScanDocDataBody.toString())
-            vechileLoanUnloadViewModel.getVehicleDataList(mScanDocDataBody)
-        }
-
-        binding.reset.setOnClickListener {
-            vechileDataBox?.removeAll()
-            binding.type.isEnabled = true
-            enableDocument(true)
-            enableTrue = false
-            binding.type.setText(resources.getString(R.string.select_option))
-
-            binding.save.visibility = View.VISIBLE
-            binding.submit.visibility = View.GONE
-            binding.boxNo.visibility = View.VISIBLE
-            binding.ivPrint.visibility = View.VISIBLE
-            sharedPreference.save(Constant.VECHICLE_ENABLE, enableTrue)
-            vechileListDataBox?.removeAll()
-            vechileListDataBox?.all?.let { setRecylatView(it) }
-            getDoctype()
-        }
+        alertDialog.show()
+        alertDialog.setCancelable(true)
     }
 
     private fun getDoctype(){
@@ -350,30 +378,21 @@ class VehicleLoadUploadActivity : BaseActivity() {
         }
     }
 
-    fun getJSon(scanCode: List<VechileData>): Map<String, String> {
-        val HeaderObj = JSONObject()
-        val jsonArrayT1 = JSONArray()
-        var atten: JSONObject? = null
-        val jsonObj = JSONObject()
+    fun getJSon(scanCode: List<VechileData>) {
 
+        var dataRequest = ArrayList<VehicleLoadRequest.Data>()
         for (value in scanCode) {
-            atten = JSONObject()
-            atten.put("scan_code", value.bar_code)
-            jsonArrayT1.put(atten)
+            dataRequest.add(VehicleLoadRequest.Data(value.bar_code?.trim()!!))
         }
 
-        jsonObj.put("CID", sharedPreference.getValueString(Constant.COMPANY_ID)!!)
-        jsonObj.put("data", jsonArrayT1.toString())
-
-        val body = mapOf<String, String>(
-            "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!,
-            "BID" to sharedPreference.getValueString(Constant.BID)!!,
-            "DOCNUMBER" to getDocumentNo(),
-            "DOCTYPE" to sharedPreference.getValueString(Constant.DOCTYPE)!!,
-            "EMPNO" to sharedPreference.getValueString(Constant.EMP_NO)!!,
-            "DATASTR" to jsonObj.toString()
-        )
-        return body
+        var vecicleloadRequst = VehicleLoadRequest(sharedPreference.getValueString(Constant.COMPANY_ID)!!,
+            sharedPreference.getValueString(Constant.BID)!!,
+            sharedPreference.getValueString(Constant.DOCUMENT)!!,
+            sharedPreference.getValueString(Constant.DOCTYPE)!!,
+            sharedPreference.getValueString(Constant.EMP_NO)!!,
+            dataRequest!!)
+        var jsonData = Gson().toJson(vecicleloadRequst)
+        vechileLoanUnloadViewModel.uploadNewVehicleScan(vecicleloadRequst)
     }
 
 
@@ -388,43 +407,38 @@ class VehicleLoadUploadActivity : BaseActivity() {
         }
     }
 
-    fun findDocumentNo(barcode: String) {
-       // if (vechileDataBox?.all?.size!! > 0) {
-
-            var stockData =
-                vechileDataBox?.query()?.equal(VechileData_.bar_code, barcode)?.build()?.findFirst()
-            if (stockData != null) {
-                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                    .setTitleText("Barcode already scan")
-                    .setContentText(barcode)
-                    .setConfirmButton("ok", SweetAlertDialog.OnSweetClickListener {
-                        it.dismiss()
-                        if (isCamera) startScanning()
-                    })
-                    .show()
+    private fun findDocumentNo(barcode: String) {
+            var stockData = vechileDataBox?.query(VechileData_.bar_code.equal(barcode))?.build()?.findFirst()
+            if (stockData != null && stockData.isMatch==true) {
+                binding.tvScanStatus.setTextColor(resources.getColor(R.color.yellow))
+                binding.tvScanStatus.text = getString(R.string.barcode_already_scan)
+                checkListSize()
             } else {
-                var barCodeData = vechileListDataBox?.query()?.equal(VehicleListData_.BarCodeNo, barcode)?.build()?.findFirst()
-                if(barCodeData!=null){
-                    vechileDataBox?.put(barcode?.let { it1 -> getData(it1) })
+                var barCodeData = vechileListDataBox?.query(VehicleListData_.BarCodeNo.equal(barcode))?.build()?.findFirst()
+                if(barCodeData!=null && !barCodeData.Destination.isNullOrEmpty()){
+                    vechileDataBox?.put(barcode?.let { it1 -> getData(it1,true) })
                     barCodeData?.isScan = true
                     vechileListDataBox?.put(barCodeData)
-                    SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                        .setTitleText("Barcode")
-                        .setContentText(barcode)
-                        .setConfirmButton("ok", SweetAlertDialog.OnSweetClickListener {
-                            it.dismiss()
-                            if (isCamera) startScanning()
-                        })
-                        .show()
+                    binding.tvScanStatus.setTextColor(resources.getColor(R.color.green))
+                    binding.tvScanStatus.text = "${getString(R.string.success)} ChgWet: ${barCodeData.ChgWeight}"
+                    checkListSize()
                 }else{
-                    SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Wrong barcode scan")
-                        .setContentText(barcode)
-                        .setConfirmButton("ok", SweetAlertDialog.OnSweetClickListener {
-                            it.dismiss()
-                            if (isCamera) startScanning()
-                        })
-                        .show()
+                    var barCodeData = vechileListDataBox?.query(VehicleListData_.BarCodeNo.equal(barcode))?.build()?.findFirst()
+                    if(barCodeData!=null){
+                        binding.tvScanStatus.setTextColor(resources.getColor(R.color.red))
+                        binding.tvScanStatus.text = getString(R.string.wrong_barcode_scan)
+                        sendExtraScan(barcode)
+                        checkListSize()
+                    }else{
+                        vechileDataBox?.put(barcode?.let { it1 -> getData(it1,false) })
+                        var barCodeData = VehicleListData(0,"","","",barcode,"",true)
+                        vechileListDataBox?.put(barCodeData)
+                        binding.tvScanStatus.setTextColor(resources.getColor(R.color.red))
+                        binding.tvScanStatus.text = getString(R.string.wrong_barcode_scan)
+                        sendExtraScan(barcode)
+                        checkListSize()
+                    }
+
                 }
                 vechileListDataBox?.all?.let { setRecylatView(it) }
 
@@ -449,9 +463,43 @@ class VehicleLoadUploadActivity : BaseActivity() {
         binding.boxNo.setText("")
     }
 
+    private fun sendExtraScan(barcode: String){
+        val mScanDocDataBody = mapOf<String, String>(
+            "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!,
+            "BID" to sharedPreference.getValueString(Constant.BID)!!,
+            "EMPNO" to sharedPreference.getValueString(Constant.EMP_NO)!!,
+            "DOCNUMBER" to sharedPreference.getValueString(Constant.DOCUMENT)!!,
+            "DOCTYPE" to docType,
+            "BARCODENO" to barcode,
+
+        )
+        vechileLoanUnloadViewModel.sendExtraScan(mScanDocDataBody)
+    }
+
+    private fun checkListSize(){
+        if(vechileDataBox?.all?.size!!>=50){
+            SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Upload your data")
+                .setContentText("Please submit scan data and rescan again")
+                .setConfirmButton("ok", SweetAlertDialog.OnSweetClickListener { sweetAlert ->
+                    sweetAlert.dismiss()
+                    showDialog(false)
+                    getJSon(vechileDataBox?.all!!)
+                })
+                .show()
+
+        }else{
+            if (isCamera) startScanning()
+        }
+    }
+
 
     private fun setRecylatView(data: MutableList<VehicleListData>) {
-        binding.totalScan.text = "Total Number of Scan : ${data?.size!!}/${vechileDataBox?.all?.size }"
+        var count = 0
+        vechileDataBox?.all?.forEach{
+            if(it.isMatch == true)  count++
+        }
+        binding.scan.text = "$count"
         data.sortBy { it.isScan==true }
         if (data.size!! > 0) {
             Log.d(TAG, data.size.toString())
@@ -467,26 +515,10 @@ class VehicleLoadUploadActivity : BaseActivity() {
     }
 
 
-    /*private fun setRecylatView() {
-        if (vechileDataBox?.all?.size!! > 0 ) {
-            Log.d(TAG,vechileDataBox?.all?.size.toString())
-            binding.constraintLayout.visibility = View.VISIBLE
-            binding.submit.visibility = View.VISIBLE
-            binding.totalScan.text = "Total Number of Scan : " + vechileDataBox?.all?.size!!
-            *//*(binding.stockListRecyclerview.adapter as VechileLoadAdapter).setItems(
-                vechileDataBox?.all!!
-            )*//*
-            //binding.stockListRecyclerview.adapter.notifyDataSetChanged()
-        }else{
-            binding.constraintLayout.visibility = View.GONE
-            binding.submit.visibility = View.GONE
-        }
-    }*/
-
-    private fun getData(item: String): VechileData {
+    private fun getData(item: String,is_match:Boolean): VechileData {
         val stockData = VechileData()
         stockData.bar_code = item
-
+        stockData.isMatch = is_match
 
         return stockData
     }
@@ -503,11 +535,11 @@ class VehicleLoadUploadActivity : BaseActivity() {
         return stockData
     }
 
-    private fun callScanTotalAPI() {
+    private fun callViewDocumentListAPI() {
         val mScanDocDataBody = mapOf<String, String>(
             "CID" to sharedPreference.getValueString(Constant.COMPANY_ID)!!,
             "BID" to sharedPreference.getValueString(Constant.BID)!!,
-            "DOCNUMBER" to getDocumentNo(),
+            "DOCNUMBER" to sharedPreference.getValueString(Constant.DOCUMENT)!!,
             "DOCTYPE" to docType
         )
         showDialog()
@@ -554,9 +586,11 @@ class VehicleLoadUploadActivity : BaseActivity() {
 
     fun getDocumentNo(): String {
         var documentno = ""
-        when (docType!!) {
-            "PRS" -> documentno =
-                "${binding.documentNo1.text.toString()}/${binding.documentNo2.text.toString()}/${binding.documentNo3.text.toString()}${binding.documentNo4.text.toString()}"
+        when (docType) {
+            "PRS" ->{
+                documentno =
+                    "${binding.documentNo1.text.toString()}/${binding.documentNo2.text.toString()}/${binding.documentNo3.text.toString()}${binding.documentNo4.text.toString()}"
+            }
             "MFIN" -> {
                 documentno = "${binding.documentNo4.text.toString()}"
             }
@@ -564,9 +598,51 @@ class VehicleLoadUploadActivity : BaseActivity() {
                 documentno =
                     "${binding.documentNo1.text.toString()}/${binding.documentNo2.text.toString()}/${binding.documentNo3.text.toString()}${binding.documentNo4.text.toString()}"
             }
-            "DRS", "DRS" -> documentno =
-                "${binding.documentNo1.text.toString()}/${binding.documentNo2.text.toString()}/${binding.documentNo3.text.toString()}${binding.documentNo4.text.toString()}"
+            "DRS", "DRS" ->{
+                documentno =
+                    "${binding.documentNo1.text.toString()}/${binding.documentNo2.text.toString()}/${binding.documentNo3.text.toString()}${binding.documentNo4.text.toString()}"
+            }
+            else -> {
+                documentno =
+                    "${binding.documentNo1.text.toString()}/${binding.documentNo2.text.toString()}/${binding.documentNo3.text.toString()}${binding.documentNo4.text.toString()}"
+            }
         }
         return documentno
+    }
+
+    fun setDocumentNo() {
+        docType = sharedPreference.getValueString(Constant.DOCTYPE)!!
+        var documentNo = sharedPreference.getValueString(Constant.DOCUMENT)!!
+        var docNo = documentNo.split("/")
+        when (docType) {
+            "PRS" -> {
+                binding.documentNo1.setText(docNo[0])
+                binding.documentNo2.setText(docNo[1])
+                binding.documentNo3.setText(docNo[2].substring(0,2))
+                binding.documentNo4.setText(docNo[2].substring(2))
+            }
+
+            "MFIN" -> {
+                binding.documentNo4.setText(sharedPreference.getValueString(Constant.DOCUMENT)!!)
+            }
+            "MFOUT" -> {
+                binding.documentNo1.setText(docNo[0])
+                binding.documentNo2.setText(docNo[1])
+                binding.documentNo3.setText(docNo[2].substring(0,2))
+                binding.documentNo4.setText(docNo[2].substring(2))
+            }
+            "DRS", "DRS" -> {
+                binding.documentNo1.setText(docNo[0])
+                binding.documentNo2.setText(docNo[1])
+                binding.documentNo3.setText(docNo[2].substring(0,2))
+                binding.documentNo4.setText(docNo[2].substring(2))
+            }
+            else -> {
+                binding.documentNo1.setText(docNo[0])
+                binding.documentNo2.setText(docNo[1])
+                binding.documentNo3.setText(docNo[2].substring(0,2))
+                binding.documentNo4.setText(docNo[2].substring(2))
+            }
+        }
     }
 }

@@ -108,7 +108,7 @@ class EkartLocationActivity : BaseActivity(),TextToSpeech.OnInitListener {
         if(sharedPreference.getValueString("result")!=null){
             var str = sharedPreference.getValueString("result")!!.drop(13).dropLast(9)
 
-            var ekart = eKartBox?.query()?.equal(EkartDB_.lcode, str)?.build()?.findFirst()
+            var ekart = eKartBox?.query(EkartDB_.lcode.equal(str))?.build()?.findFirst()
             ekart?.location?.let { it1 -> Log.d(TAG, it1) }
             //routeBox?.query()?.equal(RouteDB_.RouteID, id)?.build()?.findFirst()
 

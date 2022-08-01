@@ -21,10 +21,10 @@ class LocationScanViewModel (var locationScanRepository: LocationScanRepository)
         }
     }
 
-    fun scanLocation(cid:String,bid:String,empno:String,boxnumber:String) {
+    fun scanLocation(cid:String,bid:String,empno:String,boxnumber:String,branchName:String) {
         viewModelScope.launch() {
             try {
-                val response = locationScanRepository.scanLocation(cid,bid,empno,boxnumber)
+                val response = locationScanRepository.scanLocation(cid,bid,empno,boxnumber,branchName)
                 scanLocationResponse.value = response
             } catch (e: Exception) {
             }

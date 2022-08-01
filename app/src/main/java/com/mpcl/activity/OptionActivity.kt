@@ -28,7 +28,6 @@ import com.mpcl.R
 import com.mpcl.activity.barcode_setting.DeviceSetupActivity
 import com.mpcl.activity.barcode_setting.StickerPrintActivity
 import com.mpcl.activity.operation.*
-import com.mpcl.activity.operation.*
 import com.mpcl.adapter.ExpandableListAdapter
 import com.mpcl.app.BaseActivity
 import com.mpcl.app.Constant
@@ -41,10 +40,9 @@ import com.mpcl.databinding.RegistrationDialogBinding
 import com.mpcl.model.IntentDataModel
 import com.mpcl.model.MenuModel
 import com.mpcl.model.RegistrationResponseModel
-import com.mpcl.reciver.ConnectivityReceiver
+import com.mpcl.receiver.ConnectivityReceiver
 import com.mpcl.util.BiometricPromptUtils
 import com.mpcl.util.CryptographyManager
-import com.mpcl.viewmodel.registrationViewModel.*
 import com.mpcl.viewmodel.registrationViewModel.*
 import java.util.*
 import android.content.pm.PackageManager
@@ -52,9 +50,8 @@ import android.content.pm.PackageManager
 import android.content.pm.PackageInfo
 import android.net.Uri
 import cn.pedant.SweetAlert.SweetAlertDialog
-import cn.pedant.SweetAlert.SweetAlertDialog.OnSweetClickListener
-import android.widget.Toast
 import com.mpcl.activity.barcode_setting.PickupScanActivity
+import com.mpcl.activity.pickup.PickupActivity
 import java.lang.Exception
 import java.text.SimpleDateFormat
 
@@ -88,7 +85,6 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
 
     private var headerList :MutableList<MenuModel> = mutableListOf()
     private var childList :MutableMap<MenuModel, MutableList<MenuModel>> = hashMapOf()
-
     var c: Date? = null
     var df: SimpleDateFormat? = null
     //var headerList: List<MenuModel> = ArrayList()
@@ -98,7 +94,6 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
         super.onCreate(savedInstanceState)
         binding = ActivityOptionBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.cvWebview.setOnClickListener(this)
 
         registrationRepositoty = RegistrationRepositoty()
         registrationViewModelFactory = RegistrationViewModelFactory(registrationRepositoty)
@@ -107,36 +102,41 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
         )
 
         managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
-
+        binding.cvWebview.setOnClickListener(this)
+        binding.cvPickup.setOnClickListener(this)
         registrationViewModel.employeeVerificationResponsse.observe(this, Observer {
             hideDialog()
             val responseModel = it ?: return@Observer
-            if(responseModel.size>0){
+            if(responseModel.isNotEmpty()){
                 showPopupMessage(getString(R.string.success),getString(R.string.your_attendance_done),false)
             }
         })
 
         binding.tvUserName.text = sharedPreference.getValueString(Constant.FULL_NAME)
         binding.tvMobile.text = ":  ${sharedPreference.getValueString(Constant.MOBILE)}"
+        binding.tvRegisterTo.text = "${getString(R.string.register_to)} V : ${getVersion()}"
 
-
-        /*var ste = "2G-3155864640MNI/MNIDE03RSF9D"
-        var str = ste.drop(13).dropLast(9)
-
-
-        Log.d(TAG,str)*/
-
-        /*val canAuthenticate = */BiometricManager.from(applicationContext).canAuthenticate()
-        /*if (canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS) {
-            //binding.useBiometrics.visibility = View.VISIBLE
-            //showBiometricPromptForDecryption()
-        }*/
         registerReceiver(ConnectivityReceiver(), IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
         setupNaviation()
         prepareMenuData()
         populateExpandableList()
-        checkCurrentDate()
         setOnserver()
+
+        binding.ivLogout.setOnClickListener {
+            SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Are You Sure Want To Logout?")
+                .setCancelText("No")
+                .setConfirmText("Yes")
+                .setCancelClickListener { sDialog -> sDialog.cancel() }
+                .setConfirmClickListener { sDialog ->
+                    sharedPreference.clearSharedPreference()
+                    startNewActivity(LoginActivity())
+                    finish()
+                   sDialog.cancel()
+
+                }
+                .show()
+        }
 
     }
 
@@ -159,38 +159,44 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
 
             if (responseModel.isNotEmpty()) {
                 try {
-                    val pInfo: PackageInfo = packageManager.getPackageInfo(packageName, 0)
-                    val version = pInfo.versionName
-                    Log.d("versionName","${responseModel[0].AppVersion} ${responseModel[0].Compulsory}")
-                    if(version.toFloat() < responseModel[0].AppVersion?.toFloat()!! && responseModel[0].Compulsory=="1"){
+                    val version = getVersion()
+                    Log.d("versionName","$version ${responseModel[0].AppVersion} ${responseModel[0].Compulsory}")
+                    if(responseModel[0].Logout.equals("No",true)){
+                        if(version?.toFloat()!! < responseModel[0].AppVersion?.toFloat()!! && responseModel[0].Compulsory=="1"){
 
-                        var sDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                        sDialog.setTitleText("Update Alert!")
-                            .setContentText("Download App New Version")
-                            .setConfirmText("Yes")
-                            .setCancelText("No")
-                            .setConfirmClickListener { sDialog ->
-                                sDialog.cancel()
-                                try {
-                                    val viewIntent = Intent(
-                                        "android.intent.action.VIEW",
-                                        Uri.parse("https://play.google.com/store/apps/details?id=com.mpcl")
-                                    )
-                                    startActivity(viewIntent)
-                                    finish()
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
+                            var sDialog = SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                            sDialog.setTitleText("Update Alert!")
+                                .setContentText("Download App New Version")
+                                .setConfirmText("Yes")
+                                .setConfirmClickListener { sDialog ->
+                                    sDialog.cancel()
+                                    try {
+                                        val viewIntent = Intent(
+                                            "android.intent.action.VIEW",
+                                            Uri.parse("https://play.google.com/store/apps/details?id=com.mpcl")
+                                        )
+                                        startActivity(viewIntent)
+                                        finish()
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
                                 }
-                            }
-                            .setCancelClickListener { sDialog->
-                                sDialog.cancel()
+                                .setCancelClickListener { sDialog->
+                                    sDialog.cancel()
 
-                            }
-                        sDialog.setCancelable(false)
+                                }
+                            sDialog.setCancelable(false)
                             sDialog.show()
+                        }else{
+                            Log.d("versionName","false")
+                        }
                     }else{
-                        Log.d("versionName","false")
+                        sharedPreference.clearSharedPreference()
+                        startNewActivity(LoginActivity())
+                        finish()
                     }
+
+
 
                 } catch (e: PackageManager.NameNotFoundException) {
                     e.printStackTrace()
@@ -199,6 +205,11 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
                 //showToast("Something wrong! Please try again")
             }
         })
+    }
+
+    private fun getVersion(): String? {
+        val pInfo: PackageInfo = packageManager.getPackageInfo(packageName, 0)
+        return pInfo.versionName
     }
 
     override fun onNetworkConnectionChanged(isConnected: Boolean) {
@@ -216,12 +227,13 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
     override fun onResume() {
         super.onResume()
         ConnectivityReceiver.connectivityReceiverListener = this
+        checkCurrentDate()
     }
 
     private fun setupNaviation() {
 
         binding.ivHamburgerMenu.setOnClickListener(View.OnClickListener {
-            binding.drawer.openDrawer(GravityCompat.END)
+            binding.drawer.openDrawer(GravityCompat.START)
         })
         binding.navView.setItemIconTintList(null)
         binding.appBarTitle// = findViewById(R.id.appBarTitle)
@@ -231,7 +243,7 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
                 R.id.nav_logout -> {
                 }*/
             }
-            binding.drawer.closeDrawer(GravityCompat.END)
+            binding.drawer.closeDrawer(GravityCompat.START)
             true
         })
     }
@@ -265,6 +277,9 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
         val body = mapOf<String, String>(
             "CID" to sharedPreference.getValueString(
                 Constant.COMPANY_ID
+            )!!,
+            "EMPNO" to sharedPreference.getValueString(
+                Constant.EMP_NO
             )!!
         )
         registrationViewModel.checkAppVersion(body)
@@ -406,9 +421,9 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
     override fun onClick(p0: View?) {
         when(p0?.id){
             binding.cvWebview?.id->{
-
                 startActivity(Intent(this,WebViewActivity::class.java))
             }
+            binding.cvPickup?.id->startNewActivity(PickupActivity())
         }
     }
 
@@ -564,7 +579,7 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
                     "Vehicle Load/Unload" -> {
                         startNewActivity(VehicleLoadUploadActivity())
                     }
-                    "Location Scan" -> {
+                    getString(R.string.location_scan) -> {
                         startNewActivity(LocationScanActivity())
                     }
                     "Delivery Update" -> {
@@ -599,7 +614,7 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
     private fun prepareMenuData() {
         var childModelsList: ArrayList<MenuModel> = ArrayList<MenuModel>()
 
-        var menuModel = MenuModel("Attendance", true, true) //Menu of Java Tutorials
+        var menuModel = MenuModel(getString(R.string.attendance), true, true) //Menu of Java Tutorials
         headerList.add(menuModel)
         childModelsList = ArrayList<MenuModel>()
         var childModel = MenuModel(
@@ -651,7 +666,7 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
         )
         childModelsList.add(childModel)
         childModel = MenuModel(
-            "Location Scan",
+            getString(R.string.location_scan),
             false,
             false
         )

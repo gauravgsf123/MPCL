@@ -28,7 +28,7 @@
         app:layout_constraintTop_toBottomOf="@+id/app_title"
         android:orientation="vertical">
 
-        <com.mpcl.custom.RegularTextInputLayout
+        <!--<com.mpcl.custom.RegularTextInputLayout
             android:id="@+id/textInputLayoutBoxNo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,7 +43,36 @@
                 android:inputType="textCapCharacters"
                 android:focusable="false"
                 tools:text="123456"/>
-        </com.mpcl.custom.RegularTextInputLayout>
+        </com.mpcl.custom.RegularTextInputLayout>-->
+
+        <com.mpcl.custom.RegularEditText
+            android:id="@+id/barCode"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_30sdp"
+            android:background="@drawable/edittext_background"
+            android:hint="@string/bar_code"
+            android:padding="@dimen/_8sdp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12sdp"
+            android:drawableRight="@drawable/ic_barcode_scanner"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintHorizontal_weight="5"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/iv_camera"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_camera"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:layout_constraintBottom_toBottomOf="@+id/barCode"
+            app:layout_constraintTop_toTopOf="@+id/barCode"/>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,7 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutBoxNo">
+            app:layout_constraintTop_toBottomOf="@+id/barCode">
             <com.mpcl.custom.BoldTextView
                 android:id="@+id/totalScan"
                 android:layout_width="match_parent"

@@ -5,7 +5,7 @@ class Constant {
 
         const val DOCUMENT = "document_no"
         const val INTENT_TYPE: String="intent_type"
-        //const val BASE_URL = "https://www.maxpacific.org/Magix/rest/"
+        //const val BASE_URL = "https://mobile.maxpacific.org/Magix/rest/"
         const val BASE_URL = "http://122.160.175.215/Magix/rest/"
         const val COMPANY_ID = "company_id"
         const val EMP_NO = "emp_no"
@@ -26,6 +26,7 @@ class Constant {
         const val DOCTYPE = "doc_type"
         const val MAC_ADDRESS = "mac_address"
         const val CURRENT_DATE = "current_date"
+        const val TOTAL_DOC = "total_doc"
     }
 
 }

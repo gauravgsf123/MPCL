@@ -58,7 +58,6 @@
     <string name="total_box">Total Box</string>
     <string name="type">Type</string>
     <string name="stock_checking">Stock Checking</string>
-    <string name="location_scan">Location Scan</string>
     <string name="scan_by">Scan By</string>
     <string name="location">Location</string>
     <string name="ok">Ok</string>
@@ -86,4 +85,32 @@
     <string name="pickup_scan">Pickup Scan</string>
     <string name="todo">TODO</string>
     <string name="pickup">Pickup</string>
+    <string name="pickup_pincode">Pickup Pincode</string>
+    <string name="location_scan">Location Scan</string>
+    <string name="barcode_already_scan">Barcode already scan</string>
+    <string name="wrong_barcode_scan">Wrong barcode scan</string>
+    <string name="data_not_available">Data Not Available</string>
+    <string name="you_are_not_on_location">You are not on location.</string>
+    <string name="something_wrong_please_try_again">Something wrong! Please try again</string>
+    <string name="view">View</string>
+    <string name="date_card_formate">dd/MM/yyyy</string>
+    <string name="alert_date_select">Select Date</string>
+    <string name="request_no">Request No.</string>
+    <string name="pickup_date">Date :</string>
+    <string name="customer_name">Customer Name</string>
+    <string name="update">Update</string>
+    <string name="contact_person">Contact Person</string>
+    <string name="contact_no">Contact No.</string>
+    <string name="instruction">Instruction</string>
+    <string name="pcs">PCS</string>
+    <string name="pickup_update">Pickup Update</string>
+    <string name="contact_person_name">Contact Person Name</string>
+    <string name="contact_person_no">Contact Person Number</string>
+    <string name="select">Select</string>
+
+    <string-array name="pickup_update_option">
+        <item>Select</item>
+        <item>Pickup Done</item>
+        <item>Pickup Not Done</item>
+    </string-array>
 </resources>

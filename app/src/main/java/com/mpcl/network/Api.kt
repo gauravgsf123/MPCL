@@ -3,6 +3,7 @@ package com.mpcl.employee.Network
 import com.mpcl.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.Response
 import retrofit2.http.*
 
 interface Api
@@ -96,6 +97,11 @@ interface Api
 
     @POST("operation/mVehicleData.htm")
     suspend fun getVehicleDataList(@QueryMap loginMap: Map<String, String>): List<VehicleResponseModel>
+
+
+
+
+
 
 
 }

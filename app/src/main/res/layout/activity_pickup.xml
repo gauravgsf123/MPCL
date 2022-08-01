@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.pickup.PickupActivity">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/toolbar"/>
+
+    <com.mpcl.custom.BoldTextView
+        android:id="@+id/app_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:text="@string/pickup"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/_18sdp"
+        app:layout_constraintTop_toBottomOf="@+id/top_bar" />
+
+   <androidx.recyclerview.widget.RecyclerView
+       android:id="@+id/rvPickupList"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       tools:listitem="@layout/item_pickup_list"
+       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+       app:layout_constraintTop_toBottomOf="@id/app_title"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

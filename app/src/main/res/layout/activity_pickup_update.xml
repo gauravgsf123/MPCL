@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.pickup.PickupUpdateActivity">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/toolbar" />
+
+
+    <com.mpcl.custom.BoldTextView
+        android:id="@+id/app_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:text="@string/pickup_update"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/_18sdp"
+        app:layout_constraintTop_toBottomOf="@+id/top_bar" />
+
+    <com.mpcl.custom.RegularTextInputLayout
+        android:id="@+id/textInputLayoutType"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_2sdp"
+        android:focusable="false"
+        android:hint="@string/select_option"
+        app:layout_constraintTop_toBottomOf="@+id/app_title">
+
+        <AutoCompleteTextView
+            android:id="@+id/type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:gravity="start|center"
+            android:inputType="none"
+            android:textSize="@dimen/_12sdp"
+            tools:text="123456" />
+
+    </com.mpcl.custom.RegularTextInputLayout>
+
+    <com.mpcl.custom.RegularTextInputLayout
+        android:id="@+id/textInputLayoutContactName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:hint="@string/contact_person_name"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutType">
+
+        <com.mpcl.custom.RegularTextInputEditText
+            android:id="@+id/contactName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="6"
+            tools:text="202122" />
+    </com.mpcl.custom.RegularTextInputLayout>
+
+    <com.mpcl.custom.RegularTextInputLayout
+        android:id="@+id/textInputLayoutContactNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:hint="@string/contact_person_no"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutContactName">
+
+        <com.mpcl.custom.RegularTextInputEditText
+            android:id="@+id/ContactNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="6"
+            tools:text="202122" />
+    </com.mpcl.custom.RegularTextInputLayout>
+
+    <com.mpcl.custom.RegularTextInputLayout
+        android:id="@+id/textInputReason"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_2sdp"
+        android:focusable="false"
+        android:hint="@string/select"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutContactNo">
+
+        <AutoCompleteTextView
+            android:id="@+id/reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:gravity="start|center"
+            android:inputType="none"
+            android:textSize="@dimen/_12sdp"
+            tools:text="123456" />
+
+    </com.mpcl.custom.RegularTextInputLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

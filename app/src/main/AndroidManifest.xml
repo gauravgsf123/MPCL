@@ -29,6 +29,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.pickup.PickupUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.pickup.PickupActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.barcode_setting.PickupScanActivity"
             android:exported="true" />
         <activity
@@ -37,7 +43,9 @@
         <activity
             android:name=".activity.barcode_setting.StickerPrintActivity"
             android:exported="true"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:configChanges="orientation"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activity.barcode_setting.DeviceSetupActivity"
             android:exported="true" />
@@ -55,11 +63,17 @@
         <activity android:name=".activity.operation.EkartLocationActivity" />
         <activity
             android:name=".activity.operation.AcCopyUploadActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:exported="false"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".activity.PodUploadActivity" />
         <activity android:name=".activity.OperationActivity" />
         <activity android:name=".activity.FringerPrintLoginMainActivity" />
-        <activity android:name=".activity.OptionActivity" />
+        <activity android:name=".activity.OptionActivity"
+            android:screenOrientation="sensorPortrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity android:name=".activity.RegistrationActivity" />
         <activity android:name=".activity.DashboardActivity" />
         <activity
@@ -78,10 +92,12 @@
         <activity
             android:name=".util.qr_scanner.BarcodeScanningActivity"
             android:screenOrientation="sensorLandscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/FullScreenTheme" />
         <activity
             android:name=".util.qr_scanner.QRcodeScanningActivity"
-            android:screenOrientation="sensorPortrait"
+            android:screenOrientation="fullSensor"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/FullScreenTheme" />
 
         <provider

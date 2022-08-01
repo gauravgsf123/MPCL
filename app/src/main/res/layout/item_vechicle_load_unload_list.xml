@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+        <com.mpcl.custom.SemiBoldTextView
+            android:id="@+id/sl_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textColor="@color/white"
+            android:padding="@dimen/_5sdp"/>
+        <com.mpcl.custom.RegularTextView
+            android:id="@+id/c_note"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="67674545343434"/>
+
+        <com.mpcl.custom.RegularTextView
+            android:id="@+id/scan_code"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:gravity="center"
+            android:text="67674545343434"/>
+    </LinearLayout>
+
+
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/gray"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

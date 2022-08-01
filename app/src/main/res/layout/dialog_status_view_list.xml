@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+
+        <LinearLayout
+            android:id="@+id/linearLayoutOne"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+            <com.mpcl.custom.SemiBoldTextView
+                android:id="@+id/scan_code"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:padding="@dimen/_5sdp"
+                android:text="C Note Number" />
+
+            <com.mpcl.custom.SemiBoldTextView
+                android:id="@+id/c_note"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:gravity="center"
+                android:padding="@dimen/_5sdp"
+                android:text="Total Box" />
+
+            <com.mpcl.custom.SemiBoldTextView
+                android:id="@+id/sl_no"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="@dimen/_5sdp"
+                android:text="Scan Box" />
+
+
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/black"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutOne" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvStatusViewList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/_20sdp"
+            android:clipToPadding="true"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@+id/divider"
+            tools:listitem="@layout/item_vechicle_load_unload_list" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

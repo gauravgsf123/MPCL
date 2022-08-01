@@ -9,4 +9,5 @@ data class VehicleListData(@Id var Id: Long = 0,
                            var Destination : String? = null,
                            var CNoteNo     : String? = null,
                            var BarCodeNo   : String? = null,
+                           var ChgWeight   : String? = null,
                            var isScan   : Boolean? = false)

@@ -141,14 +141,14 @@ class RegistrationActivity : BaseActivity() {
             if(it.size>0){
                 binding.textInputLayoutName.visibility = View.VISIBLE
                 binding.textInputLayoutBranch.visibility = View.VISIBLE
-                binding.name.setText(it.get(0).empName)
-                binding.branch.setText(it.get(0).branchName)
+                binding.name.setText(it[0].empName)
+                binding.branch.setText(it[0].branchName)
                 if(attendanceType==1){
-                    Log.d("IMEI_NO",getDeviceIMEIId(this)+" : "+it.get(0).imeino)
-                    /*if(getDeviceIMEIId(this)!=it.get(0).imeino){
+                    Log.d("IMEI_NO",getDeviceIMEIId(this)+" : "+ it[0].imeino)
+                    /*if(getDeviceIMEIId(this)!= it[0].imeino){
                         showError(getString(R.string.opps),"Device not match.")
-                    }else if (it.get(0).longitue?.let { it1 ->
-                            it.get(0).latitude?.let { it2 ->
+                    }else*/ if (it[0].longitue?.let { it1 ->
+                            it[0].latitude?.let { it2 ->
                                 getLocation(
                                     it2.toDouble(),
                                     it1?.toDouble()
@@ -158,19 +158,19 @@ class RegistrationActivity : BaseActivity() {
                             calculateDistance(getLocation(latitude, longitude),
                                 it2
                             )
-                        }!! > 250){
+                        }!! > 500){
                         //if(calculateDistance(getLocation(latitude, longitude), getLocation(28.611936, 77.290313))>250){
                         //accuracyMeter = calculateDistance(getLocation(latitude, longitude), getLocation(28.53453, 77.78878))
-                        showError(getString(R.string.opps),"You are not on location.")
-                    }else{*/
+                        showError(getString(R.string.opps),getString(R.string.you_are_not_on_location))
+                    }else{
                     binding.selfieImage.visibility = View.VISIBLE
-                    //}
+                    }
                 }else{
                     binding.selfieImage.visibility = View.VISIBLE
                 }
 
             }else{
-                showToast("Something wrong! Please try again")
+                showToast(getString(R.string.something_wrong_please_try_again))
                 binding.textInputLayoutName.visibility = View.GONE
                 binding.textInputLayoutBranch.visibility = View.GONE
                 binding.selfieImage.visibility = View.GONE

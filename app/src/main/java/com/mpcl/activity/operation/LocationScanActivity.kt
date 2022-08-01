@@ -3,11 +3,13 @@ package com.mpcl.activity.operation
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -39,6 +41,7 @@ class LocationScanActivity : BaseActivity() {
     private var branchList : MutableList<String> = mutableListOf()
     private var branchCode : MutableList<String> = mutableListOf()
     private var bid :String?=null
+    private var isCamera = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,9 +49,14 @@ class LocationScanActivity : BaseActivity() {
         setContentView(binding.root)
         managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
 
-        binding.boxNo.setOnClickListener {
+        binding.ivCamera.setOnClickListener {
+            isCamera = true
+            managePermissions.checkPermissions()
+            selectedScanningSDK = QRcodeScanningActivity.ScannerSDK.MLKIT
             startScanning()
         }
+
+        binding.barCode.setOnClickListener { isCamera = false }
 
         //val traderType  = listOf("Noida", "Delhi", "Patna")
 //        val traderTypeAdapter = ArrayAdapter(this, R.layout.drop_down_list_item, traderType)
@@ -89,7 +97,7 @@ class LocationScanActivity : BaseActivity() {
         binding.branchName.onItemClickListener = OnItemClickListener { parent, view, position, id ->
             val selected = parent.getItemAtPosition(position)
             bid = branchCode[position]
-            Log.d(TAG,branchCode[position].toString())
+            Log.d(TAG,branchCode[position].toString()+binding.branchName.text.toString())
 
         }
 
@@ -97,7 +105,7 @@ class LocationScanActivity : BaseActivity() {
             showDialog()
             bid?.let { it1 ->
                 scanLocationViewModel.scanLocation(sharedPreference.getValueString(Constant.COMPANY_ID)!!,
-                    it1,sharedPreference.getValueString(Constant.EMP_NO)!!,binding.boxNo.text.toString())
+                    it1,sharedPreference.getValueString(Constant.EMP_NO)!!,binding.barCode.text.toString(),binding.branchName.text.toString())
             }
         }
 
@@ -110,12 +118,25 @@ class LocationScanActivity : BaseActivity() {
                     .setContentText(responseModel[0].Response)
                     .setConfirmButton("ok", SweetAlertDialog.OnSweetClickListener { sweetAlert ->
                         sweetAlert.dismiss()
-                        startScanning()
+                        if (isCamera) startScanning()
                     })
                     .show()
             }
 
         })
+
+        binding.barCode.doOnTextChanged { text, start, count, after ->
+            if(binding.barCode.text.toString().trim().isNotEmpty()){
+                showDialog()
+                bid?.let { it1 ->
+                    scanLocationViewModel.scanLocation(sharedPreference.getValueString(Constant.COMPANY_ID)!!,
+                        it1,sharedPreference.getValueString(Constant.EMP_NO)!!, binding.barCode.text.toString().trim(),
+                        binding.branchName.text.toString()
+                    )
+                }
+                binding.barCode.setText("")
+            }
+        }
     }
 
     override fun onPostResume() {
@@ -123,13 +144,7 @@ class LocationScanActivity : BaseActivity() {
         if(sharedPreference.getValueString("result")!=null){
             var str = sharedPreference.getValueString("result")
 
-            binding.boxNo.setText(str)
-            showDialog()
-            bid?.let { it1 ->
-                scanLocationViewModel.scanLocation(sharedPreference.getValueString(Constant.COMPANY_ID)!!,
-                    it1,sharedPreference.getValueString(Constant.EMP_NO)!!, str!!
-                )
-            }
+            binding.barCode.setText(str)
             //speakText(ekart?.location)
             sharedPreference.removeValue("result")
         }

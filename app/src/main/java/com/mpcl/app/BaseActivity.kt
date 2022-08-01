@@ -1,6 +1,7 @@
 package com.mpcl.app
 
 import android.R
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -80,10 +81,10 @@ open abstract class BaseActivity : AppCompatActivity() {
         return value
     }
 
-    protected open fun showDialog(){
+    protected open fun showDialog(value:Boolean=true){
         pDialog.progressHelper.barColor = Color.parseColor("#C70B0D")
         pDialog.titleText = "Loading ..."
-        pDialog.setCancelable(true)
+        pDialog.setCancelable(value)
         pDialog.show()
     }
     protected open fun hideDialog(){
@@ -99,12 +100,12 @@ open abstract class BaseActivity : AppCompatActivity() {
         //if (txtHeading != null) txtHeading.setText(resId)
     }
 
-    protected open fun getDateTime():String{
+    protected open fun getDateTime(): String {
         val sdf = SimpleDateFormat("dd/MM/yyyy hh:mm:ss")
-        val currentDate = sdf.format(Date())
-        return currentDate;
+        return sdf.format(Date());
     }
 
+    @SuppressLint("HardwareIds")
     fun getDeviceId():String{
         return Settings.Secure.getString(
             this.contentResolver,
@@ -163,11 +164,12 @@ open abstract class BaseActivity : AppCompatActivity() {
 
     protected open fun startNewActivity(activity: Activity) {
         startActivity(Intent(this, activity::class.java))
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
+       // backPress()
     }
 
 

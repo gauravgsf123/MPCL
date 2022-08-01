@@ -10,5 +10,6 @@ data class StickerDataResponseModel(@SerializedName("Response") var Response    
                                     @SerializedName("CNoteNo") var CNoteNo     : String,
                                     @SerializedName("BarCodeNo") var BarCodeNo   : String,
                                     @SerializedName("Shortcode") var Shortcode   : String,
+                                    @SerializedName("Location") var Location   : String,
                                     var printDone:Boolean=false){
 }

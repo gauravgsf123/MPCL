@@ -25,7 +25,7 @@ class VechileLoadAdapter : RecyclerView.Adapter<VechileLoadAdapter.MyViewHolder>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.stock_checking_list_item, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_vechicle_load_unload_list, parent, false)
         ).apply {
             itemClick = { i ->
                 this@VechileLoadAdapter.itemClick?.invoke(i)

@@ -3,10 +3,12 @@ package com.mpcl.activity.operation
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.mpcl.R
@@ -43,6 +45,7 @@ class StockCheckingActivity : BaseActivity() {
 
     private var scanList : MutableList<String> = mutableListOf()
     private var stockCheckBox: Box<StockCheckingDB>? = null
+    private var isCamera = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,29 +59,67 @@ class StockCheckingActivity : BaseActivity() {
         }
 
         stockCheckBox = ObjectBox.boxStore.boxFor(StockCheckingDB::class.java)
-        /*if (stockCheckBox?.all?.size!! > 0 ) {
-
-            binding.constraintLayout.visibility = View.VISIBLE
-            binding.save.visibility = View.VISIBLE
-            binding.totalScan.text = "Total Number of Scan : " + stockCheckBox?.all?.size!!
-            val stockData = stockCheckBox?.all
-            stockData?.let {
-                (binding.stockListRecyclerview.adapter
-                        as StockCheckingListAdapter)
-                    .setItems(it)
-            }
-        }else{
-            binding.constraintLayout.visibility = View.GONE
-            binding.save.visibility = View.GONE
-        }*/
 
         managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
 
-        binding.boxNo.setOnClickListener {
+        binding.ivCamera.setOnClickListener {
+            isCamera = true
+            managePermissions.checkPermissions()
+            selectedScanningSDK = QRcodeScanningActivity.ScannerSDK.MLKIT
             startScanning()
         }
 
+        binding.barCode.setOnClickListener { isCamera = false }
 
+        binding.barCode.doOnTextChanged { text, start, count, after ->
+            if(binding.barCode.text.toString().trim().isNotEmpty()){
+                if (stockCheckBox?.all?.size!! > 0) {
+
+                    var stockData = stockCheckBox?.query(StockCheckingDB_.bar_code.equal(binding.barCode.text.toString().trim()))?.build()?.findFirst()
+                    if (stockData!=null) {
+                        SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Barcode already scan")
+                            .setContentText(binding.barCode.text.toString().trim())
+                            .setConfirmButton("ok", SweetAlertDialog.OnSweetClickListener {
+                                it.dismiss()
+                                if (isCamera) startScanning()
+                            })
+                            .show()
+                    } else {
+                        binding.barCode.text.toString().trim()?.let { scanList.add(it) }
+                        stockCheckBox?.put(binding.barCode.text.toString().trim()?.let { it1 -> getData(it1) })
+                        SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                            .setTitleText("Barcode")
+                            .setContentText(binding.barCode.text.toString().trim())
+                            .setConfirmButton("ok", SweetAlertDialog.OnSweetClickListener {
+
+                                it.dismiss()
+                                if (isCamera) startScanning()
+                            })
+                            .show()
+                    }
+
+                } else {
+
+                    var str = binding.barCode.text.toString().trim()
+                    str?.let { scanList.add(it) }
+                    stockCheckBox?.put(str?.let { it1 -> getData(it1) })
+                    SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Barcode")
+                        .setContentText(str)
+                        .setConfirmButton("ok",SweetAlertDialog.OnSweetClickListener {
+
+                            it.dismiss()
+                            if (isCamera) startScanning()
+                        })
+                        .show()
+                }
+
+                binding.barCode.setText("")
+                setRecylatView()
+            }
+
+        }
 
 
 
@@ -131,48 +172,7 @@ class StockCheckingActivity : BaseActivity() {
         if(sharedPreference.getValueString("result")?.isNotEmpty() == true) {
             var str = sharedPreference.getValueString("result")
             Log.d(TAG, str!!)
-            binding.boxNo.setText(str)
-            if (stockCheckBox?.all?.size!! > 0) {
-
-                var stockData = stockCheckBox?.query()?.equal(StockCheckingDB_.bar_code, str)?.build()?.findFirst()
-                if (stockData!=null) {
-                    SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Barcode already scan")
-                        .setContentText(str)
-                        .setConfirmButton("ok", SweetAlertDialog.OnSweetClickListener {
-                            it.dismiss()
-                            startScanning()
-                        })
-                        .show()
-                } else {
-                    str?.let { scanList.add(it) }
-                    stockCheckBox?.put(str?.let { it1 -> getData(it1) })
-                    SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                        .setTitleText("Barcode")
-                        .setContentText(str)
-                        .setConfirmButton("ok", SweetAlertDialog.OnSweetClickListener {
-
-                            it.dismiss()
-                            startScanning()
-                        })
-                        .show()
-                }
-
-            } else {
-
-                var str = sharedPreference.getValueString("result")
-                str?.let { scanList.add(it) }
-                stockCheckBox?.put(str?.let { it1 -> getData(it1) })
-                SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                    .setTitleText("Barcode")
-                    .setContentText(str)
-                    .setConfirmButton("ok",SweetAlertDialog.OnSweetClickListener {
-
-                        it.dismiss()
-                        startScanning()
-                    })
-                    .show()
-            }
+            binding.barCode.setText(str)
             //stockCheckBox!!.notifyAll()
 
 
@@ -185,7 +185,6 @@ class StockCheckingActivity : BaseActivity() {
                 stockCheckBox?.put()
             }*/
         }
-        setRecylatView()
     }
 
     private fun setRecylatView() {

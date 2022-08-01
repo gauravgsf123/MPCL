@@ -1,4 +1,4 @@
-package com.mpcl.reciver
+package com.mpcl.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context

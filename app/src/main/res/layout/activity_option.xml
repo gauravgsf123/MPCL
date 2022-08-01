@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.mpcl.activity.OptionActivity"
-    tools:openDrawer="start">
+    tools:openDrawer="end">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,11 +46,22 @@
                         android:id="@+id/ivHamburgerMenu"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:src="@drawable/menu_icon" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivLogout"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/_10sdp"
                         android:rotation="180"
-                        android:src="@drawable/menu_icon" />
+                        android:rotationX="180"
+                        android:tint="@color/white"
+                        android:src="@drawable/ic_logout" />
 
                     <com.mpcl.custom.BoldTextView
                         android:id="@+id/appBarTitle"
@@ -243,7 +254,7 @@
         android:id="@+id/nav_view"
         android:layout_width="@dimen/_180sdp"
         android:layout_height="match_parent"
-        android:layout_gravity="end"
+        android:layout_gravity="start"
         android:background="@color/white"
         android:fitsSystemWindows="false"
         app:headerLayout="@layout/nav_header_landing_new"
