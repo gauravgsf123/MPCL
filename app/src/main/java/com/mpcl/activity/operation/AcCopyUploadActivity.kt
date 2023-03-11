@@ -368,6 +368,7 @@ class AcCopyUploadActivity : BaseActivity(),View.OnClickListener {
     }
 
     private fun openCameraWithScanner() {
+        intentDataModel?.type = 1
         intentDataModel?.let { BarcodeScanningActivity.start(this, selectedScanningSDK, it) }
     }
 
@@ -387,7 +388,7 @@ class AcCopyUploadActivity : BaseActivity(),View.OnClickListener {
         }
     }
 
-    protected fun updateLocation(){
+    private fun updateLocation(){
 
 
         if(intentDataModel?.type!=0){

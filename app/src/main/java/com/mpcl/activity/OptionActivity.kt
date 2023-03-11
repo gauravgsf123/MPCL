@@ -103,7 +103,7 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
 
         managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
         binding.cvWebview.setOnClickListener(this)
-        binding.cvPickup.setOnClickListener(this)
+        //binding.cvPickup.setOnClickListener(this)
         registrationViewModel.employeeVerificationResponsse.observe(this, Observer {
             hideDialog()
             val responseModel = it ?: return@Observer
@@ -565,7 +565,7 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
                     }
                     "Pod Upload" -> {
                         var intentDataModel = IntentDataModel(2, null)
-                        var intent = Intent(this, AcCopyUploadActivity::class.java)
+                        var intent = Intent(this, PODUploadActivity::class.java)
                         intent.putExtra(Constant.INTENT_TYPE, intentDataModel)
                         startActivity(intent)
                     }

@@ -107,6 +107,11 @@
     <string name="contact_person_name">Contact Person Name</string>
     <string name="contact_person_no">Contact Person Number</string>
     <string name="select">Select</string>
+    <string name="pod_upload">Pod Upload</string>
+    <string name="drs_date">Delivery Date</string>
+    <string name="otp_verification">OTP Verification</string>
+    <string name="otp_send_to_your_register_mobile_number">OTP send to your register mobile number</string>
+    <string name="verify">Verify</string>
 
     <string-array name="pickup_update_option">
         <item>Select</item>

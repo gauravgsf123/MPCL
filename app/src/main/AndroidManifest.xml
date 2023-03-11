@@ -29,6 +29,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.onboarding.OTPVerifyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.operation.PODUploadActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
             android:name=".activity.pickup.PickupUpdateActivity"
             android:exported="false" />
         <activity
@@ -42,15 +51,16 @@
             android:exported="true" />
         <activity
             android:name=".activity.barcode_setting.StickerPrintActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
-            android:configChanges="orientation"
-            android:screenOrientation="sensorLandscape"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activity.barcode_setting.DeviceSetupActivity"
             android:exported="true" />
         <activity
             android:name=".activity.barcode_setting.StickerPrintingActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true" />
         <activity
             android:name=".activity.barcode_setting.DeviceSettingActivity"
@@ -63,17 +73,17 @@
         <activity android:name=".activity.operation.EkartLocationActivity" />
         <activity
             android:name=".activity.operation.AcCopyUploadActivity"
-            android:exported="false"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".activity.PodUploadActivity" />
         <activity android:name=".activity.OperationActivity" />
         <activity android:name=".activity.FringerPrintLoginMainActivity" />
-        <activity android:name=".activity.OptionActivity"
-            android:screenOrientation="sensorPortrait"
+        <activity
+            android:name=".activity.OptionActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:screenOrientation="sensorPortrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".activity.RegistrationActivity" />
         <activity android:name=".activity.DashboardActivity" />
         <activity
@@ -91,13 +101,13 @@
         <activity android:name=".MainActivity" />
         <activity
             android:name=".util.qr_scanner.BarcodeScanningActivity"
-            android:screenOrientation="sensorLandscape"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensorLandscape"
             android:theme="@style/FullScreenTheme" />
         <activity
             android:name=".util.qr_scanner.QRcodeScanningActivity"
-            android:screenOrientation="fullSensor"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="fullSensor"
             android:theme="@style/FullScreenTheme" />
 
         <provider

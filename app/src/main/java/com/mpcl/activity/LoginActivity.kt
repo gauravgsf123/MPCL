@@ -23,6 +23,7 @@ import com.google.android.gms.location.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.mpcl.R
+import com.mpcl.activity.onboarding.OTPVerifyActivity
 import com.mpcl.app.BaseActivity
 import com.mpcl.app.Constant
 import com.mpcl.app.ManagePermissions
@@ -79,14 +80,19 @@ class LoginActivity : BaseActivity() {
             val responseModel = it ?: return@Observer
             hideDialog()
             Log.e(TAG,responseModel.toString())
-            if(responseModel.size>0){
-                if(responseModel.get(0).Response?.equals("Success") == true){
+            if(responseModel.isNotEmpty()){
+                if(responseModel[0].Response?.equals("Success") == true){
                     sharedPreference.save(Constant.COMPANY_ID,binding.companyId.text.toString().trim())
                     sharedPreference.save(Constant.EMP_NO,binding.employeeNo.text.toString().trim())
-                    sharedPreference.save(Constant.BID,responseModel.get(0).Bid!!)
-                    sharedPreference.save(Constant.FULL_NAME,responseModel.get(0).FullName!!)
-                    sharedPreference.save(Constant.USER_TYPE,responseModel.get(0).UserType!!)
-                    showPopupMessage(getString(R.string.success),getString(R.string.your_registration_completed))
+                    sharedPreference.save(Constant.BID, responseModel[0].Bid!!)
+                    sharedPreference.save(Constant.FULL_NAME, responseModel[0].FullName!!)
+                    sharedPreference.save(Constant.USER_TYPE, responseModel[0].UserType!!)
+                    sharedPreference.save(Constant.COMPANY_ID,binding.companyId.text.toString().trim())
+                    sharedPreference.save(Constant.MOBILE,binding.mobile.text.toString().trim())
+                    //showPopupMessage(getString(R.string.success),getString(R.string.your_registration_completed),responseModel[0].OtpNo!!)
+                    val intent = Intent(this, OTPVerifyActivity::class.java)
+                    intent.putExtra(Constant.OTP,responseModel[0].OtpNo!!)
+                    startActivity(intent)
                 }else{
                     showError(
                         getString(R.string.opps),
@@ -139,7 +145,7 @@ class LoginActivity : BaseActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun showPopupMessage(titleText:String,messageText:String){
+    private fun showPopupMessage(titleText: String, messageText: String, otpNo: String){
         var materialAlertDialogBuilder = MaterialAlertDialogBuilder(this, R.style.PauseDialog)
         var customAlertView = LayoutInflater.from(this).inflate(
             R.layout.dialog_no_internet,
@@ -158,7 +164,9 @@ class LoginActivity : BaseActivity() {
             sharedPreference.save(Constant.COMPANY_ID,binding.companyId.text.toString().trim())
             sharedPreference.save(Constant.MOBILE,binding.mobile.text.toString().trim())
             sharedPreference.save(Constant.IS_LOGIN,true)
-            startNewActivity(OptionActivity())
+            val intent = Intent(this, OTPVerifyActivity::class.java)
+            intent.putExtra(Constant.OTP,otpNo)
+            startActivity(intent)
             finish()
         })
 

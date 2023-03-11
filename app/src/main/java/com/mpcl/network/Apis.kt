@@ -78,7 +78,8 @@ interface Apis {
                              @Field("BID") BID: String,
                              @Field("EMPNO") EMPNO: String,
                              @Field("BOXNUMBER") BOXNUMBER: String,
-                             @Field("BRANCHNAME") BRANCHNAME: String): List<ScanLocationResponseModel>
+                             @Field("BRANCHNAME") BRANCHNAME: String,
+                             @Field("LOCATION") LOCATION: String): List<ScanLocationResponseModel>
 
     @GET("operation/mDocTypeList.htm")
     suspend fun getDocTypeList(@QueryMap loginMap: Map<String, String>): List<DocTypeListResponseModel>

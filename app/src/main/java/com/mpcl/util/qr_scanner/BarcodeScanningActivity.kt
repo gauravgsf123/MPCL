@@ -22,6 +22,7 @@ import androidx.lifecycle.observe
 import com.google.common.util.concurrent.ListenableFuture
 import com.mpcl.R
 import com.mpcl.activity.operation.AcCopyUploadActivity
+import com.mpcl.activity.operation.PODUploadActivity
 import com.mpcl.app.Constant
 import com.mpcl.databinding.ActivityBarcodeScanningBinding
 import com.mpcl.listner.ScanningResultListener
@@ -129,7 +130,11 @@ class BarcodeScanningActivity : AppCompatActivity() {
                     Log.d("result",result)
                     //Toast.makeText(this@BarcodeScanningActivity,result,Toast.LENGTH_LONG).show()
                     intentDataModel.value = result
-                    val intent = Intent(this@BarcodeScanningActivity, AcCopyUploadActivity::class.java)
+                    var intent :Intent?=null
+                    if(intentDataModel.type==1){
+                        intent = Intent(this@BarcodeScanningActivity, AcCopyUploadActivity::class.java)
+                    }else intent = Intent(this@BarcodeScanningActivity, PODUploadActivity::class.java)
+
                     intent.putExtra(Constant.INTENT_TYPE,intentDataModel)
                     startActivity(intent)
                     finish()

@@ -3,6 +3,7 @@ package com.mpcl.activity.operation
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -35,9 +36,11 @@ import io.objectbox.Box
 
 import com.mpcl.adapter.StatusViewListAdapter
 import com.mpcl.model.ScanDocTotalResponseModel
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-class VehicleLoadUploadActivity : BaseActivity() {
+class VehicleLoadUploadActivity : BaseActivity(),TextToSpeech.OnInitListener {
     private lateinit var binding: ActivityVehicleLoadUploadBinding
     private var totalLeftBox :Int?=0
     private val REQUEST_CAMERA_CAPTURE = 100
@@ -63,6 +66,7 @@ class VehicleLoadUploadActivity : BaseActivity() {
     private var vechileListDataBox: Box<VehicleListData>? = null
     private var isCamera = false
     lateinit var dialog: AlertDialog
+    private var tts: TextToSpeech? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +86,7 @@ class VehicleLoadUploadActivity : BaseActivity() {
 
             }
         }
+        tts = TextToSpeech(this, this)
 
         getDoctype()
         setObserver()
@@ -421,6 +426,7 @@ class VehicleLoadUploadActivity : BaseActivity() {
                     vechileListDataBox?.put(barCodeData)
                     binding.tvScanStatus.setTextColor(resources.getColor(R.color.green))
                     binding.tvScanStatus.text = "${getString(R.string.success)} ChgWet: ${barCodeData.ChgWeight}"
+                    speakOut(barCodeData.Destination!!)
                     checkListSize()
                 }else{
                     var barCodeData = vechileListDataBox?.query(VehicleListData_.BarCodeNo.equal(barcode))?.build()?.findFirst()
@@ -643,6 +649,40 @@ class VehicleLoadUploadActivity : BaseActivity() {
                 binding.documentNo3.setText(docNo[2].substring(0,2))
                 binding.documentNo4.setText(docNo[2].substring(2))
             }
+        }
+    }
+
+    private fun speakOut(text: String) {
+        //val text = text
+        tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null)
+    }
+
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            // set US English as language for tts tts.setLanguage(new Locale("hi"));
+            val result = tts!!.setLanguage(Locale("hi", "IN"))
+            tts!!.setPitch(1.0f) // saw from internet
+            tts!!.setSpeechRate(0.8f)
+
+            val voices = tts!!.voices
+            for (voice in voices) {
+                Log.v(TAG, voice.name)
+                if (voice.name == "hi-in-x-cfn#female_2-local") {
+                    tts!!.voice = voice
+                }
+            }
+            //tts!!.voice = Voice(Raw)// f denotes float, it actually type casts 0.5 to float
+            //tts!!.setLanguage(Locale.US);
+
+
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "The Language specified is not supported!")
+            } else {
+                //buttonSpeak!!.isEnabled = true
+            }
+
+        } else {
+            Log.e("TTS", "Initilization Failed!")
         }
     }
 }

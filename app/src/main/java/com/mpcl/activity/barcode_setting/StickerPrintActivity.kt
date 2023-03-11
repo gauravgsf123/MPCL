@@ -71,12 +71,12 @@ class StickerPrintActivity : BaseActivity(),View.OnClickListener {
             true
         }
 
-        binding.barCode.setOnFocusChangeListener {
+        /*binding.barCode.setOnFocusChangeListener {
                 view, b ->
             val inputMethod: InputMethodManager =
                 view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             if(b) inputMethod.hideSoftInputFromWindow(view.windowToken, 0)
-        }
+        }*/
 
         binding.barCode.doOnTextChanged { text, start, count, after ->
             if(!TextUtils.isEmpty(binding.barCode.text.toString().trim())){

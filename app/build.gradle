@@ -15,8 +15,8 @@ android {
         multiDexEnabled true
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 28
-        versionName "1.28"
+        versionCode 32
+        versionName "1.32"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -145,5 +145,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 
     implementation files('libs/tscsdk.jar')
+
+    implementation 'com.github.GoodieBag:Pinview:v1.4'
+    //implementation 'com.github.GoodieBag:Pinview:v1.4'
 
 }

@@ -105,7 +105,7 @@ class LocationScanActivity : BaseActivity() {
             showDialog()
             bid?.let { it1 ->
                 scanLocationViewModel.scanLocation(sharedPreference.getValueString(Constant.COMPANY_ID)!!,
-                    it1,sharedPreference.getValueString(Constant.EMP_NO)!!,binding.barCode.text.toString(),binding.branchName.text.toString())
+                    sharedPreference.getValueString(Constant.BID)!!,sharedPreference.getValueString(Constant.EMP_NO)!!,binding.barCode.text.toString(),binding.branchName.text.toString(),it1)
             }
         }
 
@@ -130,8 +130,8 @@ class LocationScanActivity : BaseActivity() {
                 showDialog()
                 bid?.let { it1 ->
                     scanLocationViewModel.scanLocation(sharedPreference.getValueString(Constant.COMPANY_ID)!!,
-                        it1,sharedPreference.getValueString(Constant.EMP_NO)!!, binding.barCode.text.toString().trim(),
-                        binding.branchName.text.toString()
+                        sharedPreference.getValueString(Constant.BID)!!,sharedPreference.getValueString(Constant.EMP_NO)!!, binding.barCode.text.toString().trim(),
+                        binding.branchName.text.toString(),it1
                     )
                 }
                 binding.barCode.setText("")
