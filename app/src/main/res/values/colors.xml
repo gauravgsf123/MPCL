@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#D86F33</color>
     <color name="colorAccent">#599544</color>
     <color name="black">#FF000000</color>
+    <color name="black_light">#323131</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#F44336</color>
     <color name="transparent">#00FFFFFF</color>
@@ -19,4 +20,8 @@
     <color name="barcode_reticle_background">#99000000</color>
     <color name="barcode_reticle_stroke">#ffffff</color>
     <color name="yellow">#FFEB3B</color>
+    <color name="light_orange">#33F37D39</color>
+    <color name="light_gray">#33C0C0C0</color>
+    <color name="light_green">#AFF89A</color>
+    <color name="light_red">#F45151</color>
 </resources>

@@ -47,7 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/_30sdp"
-                    android:text="SL No. 5"
+                    tools:text="SL No. 5"
                     android:gravity="center"
                     android:padding="@dimen/_15sdp"
                     android:textColor="@color/black"
@@ -57,7 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/_30sdp"
-                    android:text="Joginder Nagar"
+                    tools:text="Joginder Nagar"
                     android:gravity="center"
                     android:textStyle="bold"
                     android:padding="@dimen/_15sdp"
@@ -68,11 +68,43 @@
 
         </androidx.cardview.widget.CardView>
 
+        <com.mpcl.custom.RegularEditText
+            android:id="@+id/etBarCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="5"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:textSize="@dimen/_12sdp"
+            android:padding="@dimen/_5sdp"
+            android:textIsSelectable="true"
+            android:inputType="none"
+            android:layout_margin="@dimen/_2sdp"
+            android:cursorVisible="false"
+            android:textColor="@color/black"
+            android:background="@drawable/edittext_background"
+            android:hint="@string/bar_code"
+            android:drawableRight="@drawable/ic_barcode_scanner"
+            app:layout_constraintRight_toLeftOf="@+id/imgBarCode"/>
+
+        <ImageView
+            android:id="@+id/imgBarCode"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            app:layout_constraintHorizontal_weight="1"
+            android:src="@drawable/ic_camera"
+            android:layout_marginStart="@dimen/_10sdp"
+            app:layout_constraintTop_toTopOf="@+id/etBarCode"
+            app:layout_constraintLeft_toRightOf="@+id/etBarCode"
+            app:layout_constraintBottom_toBottomOf="@+id/etBarCode"
+            app:layout_constraintRight_toRightOf="parent"/>
+
         <com.mpcl.custom.RegularButton
             android:id="@+id/scan"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_140sdp"
             android:text="@string/scan"
+            android:visibility="gone"
             android:textSize="@dimen/_30sdp"
             android:layout_margin="@dimen/_10sdp"
             android:textColor="@color/white"

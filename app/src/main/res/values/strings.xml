@@ -84,6 +84,7 @@
     <string name="status">Status</string>
     <string name="pickup_scan">Pickup Scan</string>
     <string name="todo">TODO</string>
+    <string name="pincode_finder">Pincode Finder</string>
     <string name="pickup">Pickup</string>
     <string name="pickup_pincode">Pickup Pincode</string>
     <string name="location_scan">Location Scan</string>
@@ -105,6 +106,7 @@
     <string name="pcs">PCS</string>
     <string name="pickup_update">Pickup Update</string>
     <string name="contact_person_name">Contact Person Name</string>
+    <string name="new_c_note_number">New C Note Number</string>
     <string name="contact_person_no">Contact Person Number</string>
     <string name="select">Select</string>
     <string name="pod_upload">Pod Upload</string>
@@ -112,10 +114,69 @@
     <string name="otp_verification">OTP Verification</string>
     <string name="otp_send_to_your_register_mobile_number">OTP send to your register mobile number</string>
     <string name="verify">Verify</string>
+    <string name="scheduled">Scheduled</string>
+    <string name="all">All</string>
+    <string name="completed">Completed</string>
+    <string name="time">Time</string>
+    <string name="today">Today</string>
+    <string name="morning">Morning</string>
+    <string name="afternoon">Afternoon</string>
+    <string name="tonight">Tonight</string>
+    <string name="Notes">Notes</string>
+    <string name="add_task">Add Task</string>
+    <string name="search">Search</string>
+    <string name="find">Find</string>
+    <string name="c_note_date">C Note Date</string>
+    <string name="edd">EDD</string>
+    <string name="edd_date">EDD Date</string>
+    <string name="add_date">Add Date</string>
+    <string name="destination">Destination</string>
+    <string name="origin">Origin</string>
+    <string name="consignee">Consignee</string>
+    <string name="consignor">Consignor</string>
+    <string name="current_status">Current Status</string>
+    <string name="please_enter_document_number">Please enter document number.</string>
+    <string name="please_select_document_type">Please select document type.</string>
+    <string name="box_packing">Box Packing</string>
+    <string name="pickup_no">Pickup Number</string>
+    <string name="item_barcode">Item Barcode</string>
+    <string name="total_scan">Total Scan</string>
+    <string name="master_box_no">Master Box Number</string>
+    <string name="seal_no">Seal Number</string>
+    <string name="sku_barcode">SKU Barcode</string>
+    <string name="total_sku">Total SKU</string>
+    <string name="vehicle_no">Vehicle Number</string>
+    <string name="box_wise_scan">Box Wise Scan</string>
+    <string name="unloading">Unloading</string>
+    <string name="loading">Loading</string>
+    <string name="internal">Internal</string>
+    <string name="external">External</string>
+    <string name="delivered">Delivered</string>
+    <string name="undelivered">Undelivered</string>
+    <string name="rto">R.T.O</string>
+    <string name="ekart_location">Ekart Location</string>
+    <string name="flipkart">Flipkart</string>
 
     <string-array name="pickup_update_option">
-        <item>Select</item>
         <item>Pickup Done</item>
         <item>Pickup Not Done</item>
     </string-array>
+
+    <string-array name="pod_status_type">
+        <item>Delivered</item>
+        <item>Undelivered</item>
+        <item>R.T.O</item>
+    </string-array>
+
+    <string-array name="document_type_option">
+        <item>CNOTE</item>
+        <item>BARCODE</item>
+        <item>INVOICE</item>
+    </string-array>
+
+    <string-array name="delivery_type_option">
+        <item>Internal</item>
+        <item>External</item>
+    </string-array>
+
 </resources>

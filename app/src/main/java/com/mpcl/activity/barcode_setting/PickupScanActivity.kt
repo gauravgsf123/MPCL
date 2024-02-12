@@ -42,14 +42,15 @@ class PickupScanActivity : BaseActivity(), View.OnClickListener {
     private var scanCount = 0
     private val REQUEST_CAMERA_CAPTURE = 1002
     private val permissionList = listOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.CAMERA
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPickupScanBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.topBar.ivHome.setOnClickListener {
+            onBackPressed()
+        }
         stickerDataRepository = StickerDataRepository()
         stickerDataViewModelFactory = StickerDataViewModelFactory(stickerDataRepository)
         stickerDataViewModel = ViewModelProvider(this,stickerDataViewModelFactory).get(

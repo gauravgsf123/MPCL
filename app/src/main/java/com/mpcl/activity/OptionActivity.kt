@@ -1,12 +1,17 @@
 package com.mpcl.activity
 
 import android.Manifest
+import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,13 +26,22 @@ import androidx.core.view.GravityCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.mpcl.R
 import com.mpcl.activity.barcode_setting.DeviceSetupActivity
+import com.mpcl.activity.barcode_setting.PickupScanActivity
 import com.mpcl.activity.barcode_setting.StickerPrintActivity
+import com.mpcl.activity.finder.FinderActivity
 import com.mpcl.activity.operation.*
+import com.mpcl.activity.operation.box_wise_scan.BoxWiseScanActivity
+import com.mpcl.activity.operation.boxpacking.BoxPackingActivity
+import com.mpcl.activity.pickup.PickupActivity
+import com.mpcl.activity.pincode_finder.PincodeFinderActivity
+import com.mpcl.activity.todo.TodayActivity
+import com.mpcl.activity.todo.TodoActivity
 import com.mpcl.adapter.ExpandableListAdapter
 import com.mpcl.app.BaseActivity
 import com.mpcl.app.Constant
@@ -40,23 +54,18 @@ import com.mpcl.databinding.RegistrationDialogBinding
 import com.mpcl.model.IntentDataModel
 import com.mpcl.model.MenuModel
 import com.mpcl.model.RegistrationResponseModel
+import com.mpcl.receiver.AlertReceiver
 import com.mpcl.receiver.ConnectivityReceiver
 import com.mpcl.util.BiometricPromptUtils
 import com.mpcl.util.CryptographyManager
 import com.mpcl.viewmodel.registrationViewModel.*
-import java.util.*
-import android.content.pm.PackageManager
-
-import android.content.pm.PackageInfo
-import android.net.Uri
-import cn.pedant.SweetAlert.SweetAlertDialog
-import com.mpcl.activity.barcode_setting.PickupScanActivity
-import com.mpcl.activity.pickup.PickupActivity
-import java.lang.Exception
+import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.*
 
 
 class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver.ConnectivityReceiverListener {
+    private lateinit var alarmManager: AlarmManager
     private lateinit var registaionResponseModel: RegistrationResponseModel
     private lateinit var registrationRepositoty: RegistrationRepositoty
     private lateinit var registrationViewModelFactory: RegistrationViewModelFactory
@@ -78,8 +87,6 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
     private lateinit var managePermissions : ManagePermissions
     private val permissionList = listOf(
         Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_PHONE_STATE
     )
 
@@ -90,6 +97,7 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
     //var headerList: List<MenuModel> = ArrayList()
     //var childList = HashMap<MenuModel, List<MenuModel>>()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOptionBinding.inflate(layoutInflater)
@@ -103,7 +111,10 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
 
         managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
         binding.cvWebview.setOnClickListener(this)
-        //binding.cvPickup.setOnClickListener(this)
+        binding.cvPickup.setOnClickListener(this)
+        binding.cvTodo.setOnClickListener(this)
+        binding.cvPincodeFinder.setOnClickListener(this)
+        binding.cvTracking.setOnClickListener(this)
         registrationViewModel.employeeVerificationResponsse.observe(this, Observer {
             hideDialog()
             val responseModel = it ?: return@Observer
@@ -120,7 +131,7 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
         setupNaviation()
         prepareMenuData()
         populateExpandableList()
-        setOnserver()
+        setObserver()
 
         binding.ivLogout.setOnClickListener {
             SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
@@ -137,7 +148,17 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
                 }
                 .show()
         }
+    }
 
+
+
+
+    fun getDate(time:Long):String {
+        var date:Date = Date(time); // *1000 is to convert seconds to milliseconds
+        var sdf:SimpleDateFormat  = SimpleDateFormat("dd/MM/yyyy HH:mm"); // the format of your date
+        //sdf.setTimeZone(TimeZone.getTimeZone("GMT-4"));
+
+        return sdf.format(date);
     }
 
     private fun checkCurrentDate(){
@@ -152,7 +173,7 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
 
     }
 
-    private fun setOnserver(){
+    private fun setObserver(){
         registrationViewModel.appVersion.observe(this, Observer {
             hideDialog()
             val responseModel = it ?: return@Observer
@@ -217,7 +238,7 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
         if(isConnected){
             managePermissions.checkPermissions()
             if(dialogNoInternet!=null && dialogNoInternet!!.isShowing){
-                dialogNoInternet!!.dismiss()
+                dialogNoInternet?.dismiss()
             }
         }
         else showPopupMessage(getString(R.string.no_internet),getString(R.string.no_internet_connection),true)
@@ -264,7 +285,7 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
         title.text = titleText
         message.text = messageText
         ok.setOnClickListener(View.OnClickListener {
-            dialogNoInternet!!.dismiss()
+            dialogNoInternet?.dismiss()
             if(isFinish) finish()
         })
 
@@ -420,10 +441,11 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onClick(p0: View?) {
         when(p0?.id){
-            binding.cvWebview?.id->{
-                startActivity(Intent(this,WebViewActivity::class.java))
-            }
+            binding.cvWebview?.id->startActivity(Intent(this,WebViewActivity::class.java))
             binding.cvPickup?.id->startNewActivity(PickupActivity())
+            binding.cvTodo?.id->startNewActivity(TodoActivity())
+            binding.cvPincodeFinder?.id->startNewActivity(PincodeFinderActivity())
+            binding.cvTracking?.id->startNewActivity(FinderActivity())
         }
     }
 
@@ -591,6 +613,12 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
                     "Stock Checking" -> {
                         startNewActivity(StockCheckingActivity())
                     }
+                    getString(R.string.box_packing) -> {
+                        startNewActivity(BoxPackingActivity())
+                    }
+                    getString(R.string.box_wise_scan) -> {
+                        startNewActivity(BoxWiseScanActivity())
+                    }
                     getString(R.string.printer_setup) -> {
                         startNewActivity(DeviceSetupActivity())
                     }
@@ -689,17 +717,45 @@ class OptionActivity : BaseActivity(),View.OnClickListener, ConnectivityReceiver
             false
         )
         childModelsList.add(childModel)
+
+        childModel = MenuModel(
+            getString(R.string.box_packing),
+            false,
+            false
+        )
+        childModelsList.add(childModel)
+
+        childModel = MenuModel(
+            getString(R.string.box_wise_scan),
+            false,
+            false
+        )
+        childModelsList.add(childModel)
+
         if (menuModel.hasMenu) {
             childList.put(menuModel, childModelsList)
         }
 
-        menuModel = MenuModel("Ekart Location", false, false) //Menu of Android Tutorial. No sub menus
+        menuModel = MenuModel(getString(R.string.ekart), false, false) //Menu of Android Tutorial. No sub menus
 
         headerList.add(menuModel)
         childModelsList = ArrayList<MenuModel>()
         if (!menuModel.hasMenu) {
             childList.put(menuModel, childModelsList)
         }
+        childModel = MenuModel(
+            getString(R.string.ekart_location),
+            false,
+            false
+        )
+        childModelsList.add(childModel)
+
+        childModel = MenuModel(
+            getString(R.string.flipkart),
+            false,
+            false
+        )
+        childModelsList.add(childModel)
 
 
         childModelsList = ArrayList<MenuModel>()

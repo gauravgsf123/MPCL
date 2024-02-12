@@ -34,9 +34,7 @@ class StockCheckingActivity : BaseActivity() {
     private lateinit var managePermissions: ManagePermissions
     private var selectedScanningSDK = QRcodeScanningActivity.ScannerSDK.MLKIT
     private val permissionList = listOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.CAMERA
     )
 
     private lateinit var stockCheckingViewModel: StockCheckingViewModel
@@ -51,7 +49,9 @@ class StockCheckingActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityStockCheckingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        binding.topBar.ivHome.setOnClickListener {
+            onBackPressed()
+        }
         binding.stockListRecyclerview.adapter = StockCheckingListAdapter().apply {
             itemClick = { scan ->
 

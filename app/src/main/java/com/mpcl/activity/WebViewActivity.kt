@@ -20,6 +20,7 @@ import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.google.android.gms.location.*
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mpcl.R
 import com.mpcl.app.BaseActivity
 import com.mpcl.app.Constant
@@ -28,13 +29,12 @@ import com.mpcl.app.SharedPreference
 
 class WebViewActivity : BaseActivity() {
     private lateinit var webview:WebView
+    private lateinit var fbBack:FloatingActionButton
     private lateinit var progressDialog: ProgressBar
     private val baseURL = "https://mobile.maxpacific.org/Magix/WebLogin.htm"
     private lateinit var managePermissions : ManagePermissions
     private val permissionList = listOf(
         Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_PHONE_STATE,
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.ACCESS_FINE_LOCATION
@@ -52,6 +52,7 @@ class WebViewActivity : BaseActivity() {
         setContentView(R.layout.activity_web_view)
         sharedPreference = SharedPreference(this)
         webview = findViewById(R.id.webview)
+        fbBack = findViewById(R.id.fbBack)
         progressDialog = findViewById(R.id.progress)
         managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
         managePermissions.checkPermissions()
@@ -82,6 +83,10 @@ class WebViewActivity : BaseActivity() {
                     .show()
             }
         }
+        fbBack.setOnClickListener {
+            onBackPressed()
+        }
+
 
     }
 

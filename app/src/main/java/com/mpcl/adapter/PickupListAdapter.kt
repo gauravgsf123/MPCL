@@ -37,7 +37,9 @@ class PickupListAdapter(var list:ArrayList<PickupResponseModel>):RecyclerView.Ad
                 toggle(binding.ivDropDown,binding.group)
             }
             binding.update.setOnClickListener {
-                holder.context.startActivity(Intent(holder.context,PickupUpdateActivity::class.java))
+                var intent = Intent(holder.context,PickupUpdateActivity::class.java)
+                intent.putExtra("RequestNo",pickupResponseModel.RequestNo)
+                holder.context.startActivity(intent)
             }
         }
 

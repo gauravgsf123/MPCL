@@ -42,9 +42,7 @@ class StickerPrintActivity : BaseActivity(),View.OnClickListener {
 
     private val REQUEST_CAMERA_CAPTURE = 1002
     private val permissionList = listOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.CAMERA
     )
 
     @SuppressLint("ClickableViewAccessibility")
@@ -52,6 +50,9 @@ class StickerPrintActivity : BaseActivity(),View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityStickerPrintBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.topBar.ivHome.setOnClickListener {
+            onBackPressed()
+        }
         stickerDataRepository = StickerDataRepository()
         stickerDataViewModelFactory = StickerDataViewModelFactory(stickerDataRepository)
         stickerDataViewModel = ViewModelProvider(this,stickerDataViewModelFactory).get(

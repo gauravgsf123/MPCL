@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/constraintLayout"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/tvSlNo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight=".15"
+        android:text="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tvSKUBarcode"
+        android:textColor="@color/black"
+        android:padding="@dimen/_5sdp"/>
+    <com.mpcl.custom.RegularTextView
+        android:id="@+id/tvSKUBarcode"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight=".85"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_5sdp"
+        app:layout_constraintStart_toEndOf="@+id/tvSlNo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:text="67674545343434"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

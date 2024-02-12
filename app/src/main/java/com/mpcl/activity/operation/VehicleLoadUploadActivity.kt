@@ -4,11 +4,14 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -18,14 +21,15 @@ import androidx.lifecycle.ViewModelProvider
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.gson.Gson
 import com.mpcl.R
+import com.mpcl.adapter.StatusViewListAdapter
 import com.mpcl.adapter.VechileLoadAdapter
-import com.mpcl.database.ObjectBox
 import com.mpcl.app.BaseActivity
 import com.mpcl.app.Constant
 import com.mpcl.app.ManagePermissions
 import com.mpcl.database.*
 import com.mpcl.databinding.ActivityVehicleLoadUploadBinding
 import com.mpcl.databinding.DialogStatusViewListBinding
+import com.mpcl.model.ScanDocTotalResponseModel
 import com.mpcl.model.VehicleLoadRequest
 import com.mpcl.model.VehicleResponseModel
 import com.mpcl.util.qr_scanner.QRcodeScanningActivity
@@ -33,11 +37,7 @@ import com.mpcl.viewmodel.VehicleLoanUnloadViewModel.VechileLoanUnloadRepository
 import com.mpcl.viewmodel.VehicleLoanUnloadViewModel.VechileLoanUnloadViewModel
 import com.mpcl.viewmodel.VehicleLoanUnloadViewModel.VechileLoanUnloadViewModelFactory
 import io.objectbox.Box
-
-import com.mpcl.adapter.StatusViewListAdapter
-import com.mpcl.model.ScanDocTotalResponseModel
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class VehicleLoadUploadActivity : BaseActivity(),TextToSpeech.OnInitListener {
@@ -47,9 +47,7 @@ class VehicleLoadUploadActivity : BaseActivity(),TextToSpeech.OnInitListener {
     private lateinit var managePermissions: ManagePermissions
     private var selectedScanningSDK = QRcodeScanningActivity.ScannerSDK.MLKIT
     private val permissionList = listOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.CAMERA
     )
 
     private lateinit var vechileLoanUnloadRepository: VechileLoanUnloadRepository
@@ -59,7 +57,7 @@ class VehicleLoadUploadActivity : BaseActivity(),TextToSpeech.OnInitListener {
     private var valueList: MutableList<String> = mutableListOf()
     private var nameList: MutableList<String> = mutableListOf()
     private var preFixList: MutableList<String> = mutableListOf()
-    private lateinit var docType: String
+    private var docType: String =""
     private var enableTrue: Boolean = false
     private var callOneTime: Boolean = false
     private var vechileDataBox: Box<VechileData>? = null
@@ -72,6 +70,9 @@ class VehicleLoadUploadActivity : BaseActivity(),TextToSpeech.OnInitListener {
         super.onCreate(savedInstanceState)
         binding = ActivityVehicleLoadUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.topBar.ivHome.setOnClickListener {
+            onBackPressed()
+        }
         vechileDataBox = ObjectBox.boxStore.boxFor(VechileData::class.java)
         vechileListDataBox = ObjectBox.boxStore.boxFor(VehicleListData::class.java)
         managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
@@ -127,6 +128,8 @@ class VehicleLoadUploadActivity : BaseActivity(),TextToSpeech.OnInitListener {
                 docType = valueList[position]
                 sharedPreference.save(Constant.VECHICLE_POSITION, nameList[position])
                 sharedPreference.save(Constant.DOCTYPE, docType)
+                reset()
+                binding.type.setText(selected.toString())
                 when (docType!!) {
                     /*"PRS" -> {
                         showHide(true);binding.documentNo3.setText("PR")
@@ -181,21 +184,56 @@ class VehicleLoadUploadActivity : BaseActivity(),TextToSpeech.OnInitListener {
         }
 
         binding.reset.setOnClickListener {
-            vechileDataBox?.removeAll()
-            binding.type.isEnabled = true
-            enableDocument(true)
-            enableTrue = false
-            binding.type.setText(resources.getString(R.string.select_option))
-
-            binding.check.visibility = View.VISIBLE
-            binding.submit.visibility = View.GONE
-            binding.boxNo.visibility = View.GONE
-            binding.ivPrint.visibility = View.GONE
-            sharedPreference.save(Constant.VECHICLE_ENABLE, enableTrue)
-            vechileListDataBox?.removeAll()
-            vechileListDataBox?.all?.let { setRecylatView(it) }
-            getDoctype()
+            reset()
         }
+
+        binding.documentNo4.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(
+                s: CharSequence, start: Int, before: Int,
+                count: Int
+            ) {
+                val enteredString = s.toString()
+                if (docType == "MFIN") {
+                    if (enteredString.startsWith("0")) {
+                        Toast.makeText(
+                            this@VehicleLoadUploadActivity,
+                            "should not starts with zero(0)",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        if (enteredString.isNotEmpty()) {
+                            binding.documentNo4.setText(enteredString.substring(1))
+                        } else {
+                            binding.documentNo4.setText("")
+                        }
+                    }
+                }
+            }
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int, count: Int,
+                after: Int
+            ) {
+            }
+
+            override fun afterTextChanged(s: Editable) {}
+        })
+    }
+
+    private fun reset(){
+        vechileDataBox?.removeAll()
+        binding.type.isEnabled = true
+        enableDocument(true)
+        enableTrue = false
+        binding.type.setText(resources.getString(R.string.select_option))
+
+        binding.check.visibility = View.VISIBLE
+        binding.submit.visibility = View.GONE
+        binding.boxNo.visibility = View.GONE
+        binding.ivPrint.visibility = View.GONE
+        sharedPreference.save(Constant.VECHICLE_ENABLE, enableTrue)
+        vechileListDataBox?.removeAll()
+        vechileListDataBox?.all?.let { setRecylatView(it) }
+        getDoctype()
     }
 
     private fun setObserver(){
@@ -450,21 +488,6 @@ class VehicleLoadUploadActivity : BaseActivity(),TextToSpeech.OnInitListener {
 
 
             }
-
-        /*} else {
-            var str = sharedPreference.getValueString("result")
-            //str?.let { scanList.add(it) }
-            vechileDataBox?.put(str?.let { it1 -> getData(it1) })
-            SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                .setTitleText("Barcode")
-                .setContentText(str)
-                .setConfirmButton("ok", SweetAlertDialog.OnSweetClickListener {
-
-                    it.dismiss()
-                    if (isCamera) startScanning()
-                })
-                .show()
-        }*/
         sharedPreference.removeValue("result")
         binding.boxNo.setText("")
     }

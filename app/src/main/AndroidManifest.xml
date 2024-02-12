@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
         android:name=".app.MyApp"
@@ -29,13 +30,38 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".FlipkartActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.operation.box_wise_scan.BoxWiseScanActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".activity.operation.boxpacking.BoxPackingActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".activity.finder.FinderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.pincode_finder.PincodeFinderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.todo.TodayActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.todo.TodoActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.onboarding.OTPVerifyActivity"
             android:exported="false" />
         <activity
             android:name=".activity.operation.PODUploadActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
-            android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activity.pickup.PickupUpdateActivity"
@@ -68,29 +94,45 @@
         <activity android:name=".activity.operation.LocationScanActivity" />
         <activity
             android:name=".activity.operation.StockCheckingActivity"
+            android:exported="false"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".activity.operation.VehicleLoadUploadActivity" />
-        <activity android:name=".activity.operation.EkartLocationActivity" />
+        <activity
+            android:name=".activity.operation.VehicleLoadUploadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.operation.EkartLocationActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.operation.AcCopyUploadActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".activity.OperationActivity" />
-        <activity android:name=".activity.FringerPrintLoginMainActivity" />
+        <activity
+            android:name=".activity.OperationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.FringerPrintLoginMainActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.OptionActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".activity.RegistrationActivity" />
-        <activity android:name=".activity.DashboardActivity" />
+        <activity
+            android:name=".activity.RegistrationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.DashboardActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.LoginActivity"
+            android:exported="false"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".activity.SplashActivity"
+            android:exported="true"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -98,15 +140,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
         <activity
             android:name=".util.qr_scanner.BarcodeScanningActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
             android:screenOrientation="sensorLandscape"
             android:theme="@style/FullScreenTheme" />
         <activity
             android:name=".util.qr_scanner.QRcodeScanningActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
             android:screenOrientation="fullSensor"
             android:theme="@style/FullScreenTheme" />
 
@@ -119,6 +165,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path" />
         </provider>
+
+        <receiver
+            android:name=".receiver.AlertReceiver"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

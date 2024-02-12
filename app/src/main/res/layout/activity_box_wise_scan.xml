@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.operation.box_wise_scan.BoxWiseScanActivity">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/toolbar" />
+
+    <com.mpcl.custom.BoldTextView
+        android:id="@+id/app_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:text="@string/box_wise_scan"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/_18sdp"
+        app:layout_constraintTop_toBottomOf="@+id/top_bar" />
+
+    <com.mpcl.custom.RegularTextInputLayout
+        android:id="@+id/textInputLayoutVehicleNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:hint="@string/vehicle_no"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_title">
+
+        <com.mpcl.custom.RegularTextInputEditText
+            android:id="@+id/vehicleNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapCharacters"
+            android:maxLength="50"
+            tools:text="99887766" />
+    </com.mpcl.custom.RegularTextInputLayout>
+
+    <RadioGroup
+        android:id="@+id/rgVechicle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayoutVehicleNo"
+        app:layout_constraintEnd_toEndOf="@id/textInputLayoutVehicleNo"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutVehicleNo">
+
+        <RadioButton
+            android:id="@+id/rbLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorPrimary"
+            android:checked="true"
+            android:text="@string/loading"/>
+
+        <RadioButton
+            android:id="@+id/rbUnloading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorPrimary"
+            android:text="@string/unloading"
+            android:layout_marginStart="40dp" />
+
+    </RadioGroup>
+
+    <com.mpcl.custom.RegularEditText
+        android:id="@+id/scanBarCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_background"
+        android:drawableRight="@drawable/ic_barcode_scanner"
+        android:hint="@string/bar_code"
+        android:inputType="textCapCharacters"
+        android:padding="@dimen/_5sdp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/ivCamera"
+        app:layout_constraintHorizontal_weight=".7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rgVechicle"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/ivCamera"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:src="@drawable/ic_camera"
+        android:visibility="visible"
+        android:layout_marginStart="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="@+id/scanBarCode"
+        app:layout_constraintStart_toEndOf="@+id/scanBarCode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight=".1"
+        app:layout_constraintTop_toTopOf="@+id/scanBarCode" />
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/tvSlNo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:padding="@dimen/_5sdp"
+        android:text="SL No."
+        app:layout_constraintEnd_toStartOf="@+id/tvBoxItemNo"
+        app:layout_constraintHorizontal_weight=".2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scanBarCode" />
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/tvBoxItemNo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:text="@string/sku_barcode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight=".8"
+        app:layout_constraintStart_toEndOf="@+id/tvSlNo"
+        app:layout_constraintTop_toBottomOf="@+id/scanBarCode" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/black"
+        app:layout_constraintTop_toBottomOf="@+id/tvBoxItemNo" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/boxPackingListRecyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        tools:itemCount="10"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/btnNewScan"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        tools:listitem="@layout/item_box_packing_list" />
+
+    <com.mpcl.custom.RegularButton
+        android:id="@+id/btnNewScan"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="@string/new_scan"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnView"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.mpcl.custom.RegularButton
+        android:id="@+id/btnView"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="@string/view"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnSubmit"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnNewScan" />
+
+    <com.mpcl.custom.RegularButton
+        android:id="@+id/btnSubmit"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="@string/submit"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnView" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,7 +18,7 @@
         android:padding="@dimen/_8sdp"
         android:textColor="@color/black"
         android:textSize="@dimen/_12sdp"
-        android:inputType="number"
+        android:inputType="textCapCharacters"
         android:maxLength="20"
         android:maxLines="1"
         android:layout_marginTop="@dimen/_20sdp"

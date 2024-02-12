@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.finder.FinderActivity">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/toolbar" />
+
+    <com.mpcl.custom.BoldTextView
+        android:id="@+id/app_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:text="@string/tracking"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/_18sdp"
+        app:layout_constraintTop_toBottomOf="@+id/top_bar" />
+
+    <com.mpcl.custom.RegularTextInputLayout
+        android:id="@+id/textInputLayoutPincodeFinder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_2sdp"
+        android:layout_marginEnd="@dimen/_2sdp"
+        android:hint="@string/document_no"
+        app:layout_constraintBottom_toBottomOf="@+id/textInputLayoutType"
+        app:layout_constraintEnd_toStartOf="@+id/textInputLayoutType"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_title"
+        app:layout_constraintTop_toTopOf="@+id/textInputLayoutType">
+
+        <com.mpcl.custom.RegularTextInputEditText
+            android:id="@+id/etDocumentNo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textCapCharacters"
+            android:maxLength="20"
+            android:textSize="@dimen/_14sdp"
+            tools:text="110091" />
+    </com.mpcl.custom.RegularTextInputLayout>
+
+    <com.mpcl.custom.RegularTextInputLayout
+        android:id="@+id/textInputLayoutType"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_2sdp"
+        android:focusable="false"
+        app:layout_constraintEnd_toStartOf="@+id/iv_download"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textInputLayoutPincodeFinder"
+        app:layout_constraintTop_toBottomOf="@+id/app_title">
+
+        <AutoCompleteTextView
+            android:id="@+id/type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:gravity="start|center"
+            android:inputType="none"
+            android:textSize="@dimen/_12sdp"
+            tools:text="@string/select_option" />
+
+    </com.mpcl.custom.RegularTextInputLayout>
+
+    <ImageView
+        android:id="@+id/iv_download"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:src="@drawable/download_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/textInputLayoutType"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textInputLayoutType" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/gray"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayoutType" />
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/tvCNoteNoTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/c_note_number"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toStartOf="@+id/tvCNoteDateTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <com.mpcl.custom.RegularTextView
+        android:id="@+id/tvCNoteNo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/tvCNoteDate"
+        app:layout_constraintStart_toStartOf="@+id/tvCNoteNoTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvCNoteNoTitle"
+        tools:text="20657251" />
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/tvCNoteDateTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/c_note_date"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvCNoteNoTitle"
+        app:layout_constraintTop_toTopOf="@+id/tvCNoteNoTitle" />
+
+    <com.mpcl.custom.RegularTextView
+        android:id="@+id/tvCNoteDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvCNoteDateTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvCNoteDateTitle"
+        tools:text="20657251" />
+
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/tvEDDTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/edd_date"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toStartOf="@+id/tvCNoteDateTitle"
+        app:layout_constraintStart_toStartOf="@+id/tvCNoteNoTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvCNoteNo" />
+
+    <com.mpcl.custom.RegularTextView
+        android:id="@+id/tvEDD"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/tvCNoteDate"
+        app:layout_constraintStart_toStartOf="@+id/tvEDDTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvEDDTitle"
+        tools:text="20657251" />
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/tvAddDateTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/add_date"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvCNoteNoTitle"
+        app:layout_constraintTop_toTopOf="@+id/tvEDDTitle" />
+
+    <com.mpcl.custom.RegularTextView
+        android:id="@+id/tvAddDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvCNoteNo"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddDateTitle"
+        tools:text="20657251" />
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/tvOriginTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="@string/origin"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toStartOf="@+id/tvCNoteDateTitle"
+        app:layout_constraintStart_toStartOf="@+id/tvEDDTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvEDDTitle" />
+
+    <com.mpcl.custom.RegularTextView
+        android:id="@+id/tvOrigin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/tvAddDestination"
+        app:layout_constraintStart_toStartOf="@+id/tvEDDTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvOriginTitle"
+        tools:text="20657251" />
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/tvAddDestinationTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/destination"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvOriginTitle"
+        app:layout_constraintTop_toTopOf="@+id/tvOriginTitle" />
+
+    <com.mpcl.custom.RegularTextView
+        android:id="@+id/tvAddDestination"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvAddDestinationTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddDestinationTitle"
+        tools:text="20657251" />
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/tvConsignorTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="@string/consignor"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/tvOriginTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvOriginTitle" />
+
+    <com.mpcl.custom.RegularTextView
+        android:id="@+id/tvConsignor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvConsignorTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvConsignorTitle"
+        tools:text="20657251" />
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/tvConsigneeTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="@string/consignee"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/tvConsignorTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvConsignorTitle" />
+
+    <com.mpcl.custom.RegularTextView
+        android:id="@+id/tvConsignee"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvConsigneeTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvConsigneeTitle"
+        tools:text="20657251" />
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/tvCurrentStatusTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="@string/current_status"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/tvConsigneeTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvConsigneeTitle" />
+
+    <com.mpcl.custom.RegularTextView
+        android:id="@+id/tvCurrentStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvCurrentStatusTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvCurrentStatusTitle"
+        tools:text="20657251" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="tvCNoteDateTitle,tvCNoteNo,tvCNoteNoTitle,
+        tvCNoteDate,tvEDDTitle,tvEDD,tvAddDateTitle,tvAddDate,tvOriginTitle,tvOrigin,
+        tvAddDestinationTitle,tvAddDestination,tvConsignorTitle,tvConsignor,
+        tvConsigneeTitle,tvConsignee,tvCurrentStatusTitle,tvCurrentStatus"
+        app:layout_constraintTop_toBottomOf="@+id/tvCurrentStatus" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

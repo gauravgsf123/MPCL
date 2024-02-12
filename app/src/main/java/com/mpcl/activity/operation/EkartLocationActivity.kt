@@ -1,6 +1,7 @@
 package com.mpcl.activity.operation
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -8,6 +9,7 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -30,16 +32,16 @@ import com.mpcl.viewmodel.EKartViewModel.EkartViewModelFactory
 import io.objectbox.Box
 import java.util.*
 
-class EkartLocationActivity : BaseActivity(),TextToSpeech.OnInitListener {
+class EkartLocationActivity : BaseActivity(), TextToSpeech.OnInitListener {
 
-    private val textToSpeechEngine: TextToSpeech by lazy {
+    /*private val textToSpeechEngine: TextToSpeech by lazy {
         TextToSpeech(this,
             TextToSpeech.OnInitListener { status ->
                 if (status == TextToSpeech.SUCCESS) {
                     textToSpeechEngine.language = Locale.ENGLISH
                 }
             })
-    }
+    }*/
 
     private var tts: TextToSpeech? = null
     private lateinit var binding: ActivityEkartLocationBinding
@@ -53,9 +55,7 @@ class EkartLocationActivity : BaseActivity(),TextToSpeech.OnInitListener {
     private var selectedScanningSDK = QRcodeScanningActivity.ScannerSDK.MLKIT
     private var eKartList: List<EkartResponseModel>? = null
     private val permissionList = listOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.CAMERA
     )
 
     private var eKartBox: Box<EkartDB>? = null
@@ -63,7 +63,10 @@ class EkartLocationActivity : BaseActivity(),TextToSpeech.OnInitListener {
         super.onCreate(savedInstanceState)
         binding = ActivityEkartLocationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        tts = TextToSpeech(this, this)
+        tts = TextToSpeech(this@EkartLocationActivity, this)
+        binding.topBar.ivHome.setOnClickListener {
+            onBackPressed()
+        }
 
         eKartBox = ObjectBox.boxStore.boxFor(EkartDB::class.java)
         managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
@@ -80,13 +83,32 @@ class EkartLocationActivity : BaseActivity(),TextToSpeech.OnInitListener {
         })
         showDialog()
         ekartViewModel.getEKartList()
+        managePermissions.checkPermissions()
+        selectedScanningSDK = QRcodeScanningActivity.ScannerSDK.MLKIT
 
-        binding.scan.setOnClickListener(View.OnClickListener {
-            managePermissions.checkPermissions()
-            selectedScanningSDK = QRcodeScanningActivity.ScannerSDK.MLKIT
+        binding.etBarCode.setOnTouchListener { v, event ->
+            v.onTouchEvent(event)
+            val inputMethod: InputMethodManager =
+                v.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (inputMethod != null) {
+                inputMethod.hideSoftInputFromWindow(v.windowToken, 0)
+            }
+            true
+        }
+
+        binding.etBarCode.setOnFocusChangeListener {
+                view, b ->
+            val inputMethod: InputMethodManager =
+                view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if(b) inputMethod.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+
+        binding.imgBarCode.setOnClickListener(View.OnClickListener {
             startScanning()
 
         })
+
+        //speakOut("")
 
         /*intent.getData("result")?.let {
             binding.cardOutput.visibility = View.VISIBLE
@@ -99,41 +121,69 @@ class EkartLocationActivity : BaseActivity(),TextToSpeech.OnInitListener {
             speakText(ekart?.location)
         }*/
 
-        //speakOut("I am your google assistance")
+        speakOut("E-kart Location")
+        //speakText("E-kart Location")
 
     }
 
     override fun onPostResume() {
         super.onPostResume()
-        if(sharedPreference.getValueString("result")!=null){
-            var str = sharedPreference.getValueString("result")!!.drop(13).dropLast(9)
+        if (sharedPreference.getValueString("result") != null) {
+            var scanValue = sharedPreference.getValueString("result")!!
+            binding.etBarCode.setText(scanValue)
+            var barcode = scanValue.split("-")
+            var barCodeEKart = eKartBox?.query(EkartDB_.lcode.equal(barcode[0]))?.build()?.findFirst()
+            if (barCodeEKart?.location?.isNullOrEmpty() == false) {
+                if (barCodeEKart?.srno != null) {
+                    binding.cardOutput.visibility = View.VISIBLE
+                    var text = "${barCodeEKart?.srno}. ${barCodeEKart?.location}"
+                    binding.slNo.visibility = View.VISIBLE
+                    binding.output.setTextColor(ContextCompat.getColor(this, R.color.black));
+                    binding.slNo.setText("${barCodeEKart?.srno}")
+                    binding.output.setText(barCodeEKart?.location)
+                    speakOut(text)
+                } else {
+                    binding.slNo.visibility = View.GONE
+                    binding.output.setTextColor(ContextCompat.getColor(this, R.color.red));
+                    binding.output.text = "Not Readable"
+                }
+            } else {
+                var QRcode = scanValue.split("|")
+                QRcode.forEach {
+                    if (it.length == 7) {
+                        var ekart = eKartBox?.query(EkartDB_.lcode.equal(it))?.build()?.findFirst()
+                        ekart?.location?.let { it1 -> Log.d(TAG, it1) }
+                        //routeBox?.query()?.equal(RouteDB_.RouteID, id)?.build()?.findFirst()
+                        if (ekart?.srno != null) {
+                            binding.cardOutput.visibility = View.VISIBLE
+                            var text = "${ekart?.srno}. ${ekart?.location}"
+                            binding.slNo.visibility = View.VISIBLE
+                            binding.output.setTextColor(
+                                ContextCompat.getColor(
+                                    this,
+                                    R.color.black
+                                )
+                            );
+                            binding.slNo.text = "${ekart?.srno}"
+                            binding.output.text = ekart?.location
+                            speakOut(text)
+                        } else {
+                            binding.slNo.visibility = View.GONE
+                            binding.output.setTextColor(ContextCompat.getColor(this, R.color.red));
+                            binding.output.text = "Not Readable"
 
-            var ekart = eKartBox?.query(EkartDB_.lcode.equal(str))?.build()?.findFirst()
-            ekart?.location?.let { it1 -> Log.d(TAG, it1) }
-            //routeBox?.query()?.equal(RouteDB_.RouteID, id)?.build()?.findFirst()
-
-            binding.cardOutput.visibility = View.VISIBLE
-            //speakText(ekart?.location)
-            if(ekart?.srno!=null){
-                binding.cardOutput.visibility = View.VISIBLE
-                var text = "${ekart?.srno}. ${ekart?.location}"
-                binding.slNo.visibility = View.VISIBLE
-                binding.output.setTextColor(ContextCompat.getColor(this, R.color.black));
-                binding.slNo.setText("${ekart?.srno}")
-                binding.output.setText(ekart?.location)
-                speakOut(text)
-            }else{
-                binding.slNo.visibility = View.GONE
-                binding.output.setTextColor(ContextCompat.getColor(this, R.color.red));
-                binding.output.setText("Not Readable")
+                        }
+                    }
+                }
 
             }
+
 
             sharedPreference.removeValue("result")
         }
     }
 
-    fun speakText(location: String?) {
+    /*fun speakText(location: String?) {
         Log.e(TAG, location.toString())
         val text = binding.output.text.toString().trim()
         if (location?.isNotEmpty()!!) {
@@ -147,11 +197,11 @@ class EkartLocationActivity : BaseActivity(),TextToSpeech.OnInitListener {
         }
 
 
-    }
+    }*/
 
-    fun printDb(){
-        for(value in eKartBox?.all!!)
-        Log.e(TAG, value?.srno!!)
+    fun printDb() {
+        for (value in eKartBox?.all!!)
+            Log.e(TAG, value?.srno!!)
     }
 
     private fun createTable(responseModel: List<EkartResponseModel>) {
@@ -213,7 +263,7 @@ class EkartLocationActivity : BaseActivity(),TextToSpeech.OnInitListener {
     }
 
     override fun onPause() {
-        textToSpeechEngine.stop()
+        //textToSpeechEngine.stop()
         super.onPause()
     }
 
@@ -224,7 +274,7 @@ class EkartLocationActivity : BaseActivity(),TextToSpeech.OnInitListener {
 
     override fun onDestroy() {
         // Shutdown TTS
-        textToSpeechEngine.shutdown()
+        //textToSpeechEngine.shutdown()
         if (tts != null) {
             tts!!.stop()
             tts!!.shutdown()
@@ -254,6 +304,7 @@ class EkartLocationActivity : BaseActivity(),TextToSpeech.OnInitListener {
                 Log.e("TTS", "The Language specified is not supported!")
             } else {
                 //buttonSpeak!!.isEnabled = true
+                speakOut("E-kart")
             }
 
         } else {

@@ -16,6 +16,9 @@ class DeviceSetupActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDeviceSetupBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.topBar.ivHome.setOnClickListener {
+            onBackPressed()
+        }
         binding.tvLastConnectedDevice.text = sharedPreference.getValueString(Constant.MAC_ADDRESS)
         binding.btnNewAddDevice.setOnClickListener {
             binding.btnAddDevice.visibility = View.VISIBLE

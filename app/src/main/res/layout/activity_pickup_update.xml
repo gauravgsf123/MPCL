@@ -40,7 +40,7 @@
             android:gravity="start|center"
             android:inputType="none"
             android:textSize="@dimen/_12sdp"
-            tools:text="123456" />
+            tools:text="@string/select_option" />
 
     </com.mpcl.custom.RegularTextInputLayout>
 
@@ -57,9 +57,9 @@
             android:id="@+id/contactName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:maxLength="6"
-            tools:text="202122" />
+            android:inputType="textPersonName"
+            android:maxLength="50"
+            tools:text="Gaurav" />
     </com.mpcl.custom.RegularTextInputLayout>
 
     <com.mpcl.custom.RegularTextInputLayout
@@ -76,7 +76,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:maxLength="6"
+            android:maxLength="10"
+            tools:text="202122" />
+    </com.mpcl.custom.RegularTextInputLayout>
+
+    <com.mpcl.custom.RegularTextInputLayout
+        android:id="@+id/textInputLayoutCNoteNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_2sdp"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:hint="@string/c_note_number"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutContactNo">
+
+        <com.mpcl.custom.RegularTextInputEditText
+            android:id="@+id/CNoteNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="10"
             tools:text="202122" />
     </com.mpcl.custom.RegularTextInputLayout>
 
@@ -87,8 +106,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_2sdp"
         android:focusable="false"
+        android:visibility="gone"
         android:hint="@string/select"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutContactNo">
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCNoteNo">
 
         <AutoCompleteTextView
             android:id="@+id/reason"
@@ -98,8 +118,21 @@
             android:gravity="start|center"
             android:inputType="none"
             android:textSize="@dimen/_12sdp"
-            tools:text="123456" />
+            tools:text="@string/select_option" />
 
     </com.mpcl.custom.RegularTextInputLayout>
+
+    <com.mpcl.custom.RegularButton
+        android:id="@+id/save"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:visibility="visible"
+        tools:visibility="visible"
+        android:backgroundTint="@color/colorPrimary"
+        android:drawableRight="@drawable/ic_arrow_forward"
+        android:textColor="@color/white"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

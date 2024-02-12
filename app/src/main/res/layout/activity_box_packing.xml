@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.operation.boxpacking.BoxPackingActivity">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/toolbar" />
+
+    <com.mpcl.custom.BoldTextView
+        android:id="@+id/app_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:text="@string/box_packing"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/_18sdp"
+        app:layout_constraintTop_toBottomOf="@+id/top_bar" />
+
+    <com.mpcl.custom.RegularTextInputLayout
+        android:id="@+id/textInputLayoutPickupNo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:hint="@string/pickup_no"
+        app:layout_constraintEnd_toStartOf="@+id/textInputLayoutCNoteNo"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_title">
+
+        <com.mpcl.custom.RegularTextInputEditText
+            android:id="@+id/pickupNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="50"
+            tools:text="99887766" />
+    </com.mpcl.custom.RegularTextInputLayout>
+
+    <com.mpcl.custom.RegularTextInputLayout
+        android:id="@+id/textInputLayoutCNoteNo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:hint="@string/c_note_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textInputLayoutPickupNo"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@+id/app_title">
+
+        <com.mpcl.custom.RegularTextInputEditText
+            android:id="@+id/cNoteNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="50"
+            tools:text="99887766" />
+    </com.mpcl.custom.RegularTextInputLayout>
+
+    <com.mpcl.custom.RegularEditText
+        android:id="@+id/barCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        app:layout_constraintHorizontal_weight=".7"
+        android:background="@drawable/edittext_background"
+        android:drawableRight="@drawable/ic_barcode_scanner"
+        android:inputType="textCapCharacters"
+        android:padding="@dimen/_5sdp"
+        android:hint="@string/sku_barcode"
+        android:visibility="visible"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/ivCamera"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCNoteNo" />
+
+    <ImageView
+        android:id="@+id/ivCamera"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:src="@drawable/ic_camera"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/barCode"
+        app:layout_constraintStart_toEndOf="@+id/barCode"
+        app:layout_constraintEnd_toStartOf="@+id/textInputLayoutTotalScan"
+        app:layout_constraintHorizontal_weight=".1"
+        app:layout_constraintTop_toTopOf="@+id/barCode" />
+
+    <com.mpcl.custom.RegularTextInputLayout
+        android:id="@+id/textInputLayoutTotalScan"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/total_sku"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight=".3"
+        app:layout_constraintStart_toEndOf="@+id/ivCamera"
+        app:layout_constraintBottom_toBottomOf="@+id/barCode"
+        app:layout_constraintTop_toTopOf="@+id/barCode">
+
+        <com.mpcl.custom.RegularTextInputEditText
+            android:id="@+id/totalScan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:focusable="false"
+            android:maxLength="5"
+            tools:text="99887766" />
+    </com.mpcl.custom.RegularTextInputLayout>
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/tvSlNo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:padding="@dimen/_5sdp"
+        android:text="SL No."
+        app:layout_constraintEnd_toStartOf="@+id/tvBoxItemNo"
+        app:layout_constraintHorizontal_weight=".2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barCode" />
+
+    <com.mpcl.custom.SemiBoldTextView
+        android:id="@+id/tvBoxItemNo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:text="@string/sku_barcode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight=".8"
+        app:layout_constraintStart_toEndOf="@+id/tvSlNo"
+        app:layout_constraintTop_toBottomOf="@+id/barCode" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/black"
+        app:layout_constraintTop_toBottomOf="@+id/tvBoxItemNo" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/boxPackingListRecyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        tools:itemCount="10"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayoutMasterBoxNo"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        tools:listitem="@layout/item_box_packing_list" />
+
+
+    <com.mpcl.custom.RegularTextInputLayout
+        android:id="@+id/textInputLayoutMasterBoxNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:hint="@string/master_box_no"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayoutSealNo">
+
+        <com.mpcl.custom.RegularTextInputEditText
+            android:id="@+id/masterBoxNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="50"
+            tools:text="99887766" />
+    </com.mpcl.custom.RegularTextInputLayout>
+
+    <com.mpcl.custom.RegularTextInputLayout
+        android:id="@+id/textInputLayoutSealNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:hint="@string/seal_no"
+        app:layout_constraintBottom_toTopOf="@+id/btnSubmit">
+
+        <com.mpcl.custom.RegularTextInputEditText
+            android:id="@+id/sealNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapCharacters"
+            android:maxLength="50"
+            tools:text="99887766" />
+    </com.mpcl.custom.RegularTextInputLayout>
+
+    <com.mpcl.custom.RegularButton
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:backgroundTint="@color/colorPrimary"
+        android:drawableRight="@drawable/ic_arrow_forward"
+        android:text="@string/submit"
+        android:textColor="@color/white"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -70,6 +70,7 @@
                                 android:padding="@dimen/_5sdp"
                                 android:textIsSelectable="true"
                                 android:inputType="none"
+                                android:cursorVisible="false"
                                 android:textColor="@color/black"
                                 android:background="@drawable/edittext_background"
                                 android:hint="@string/bar_code"

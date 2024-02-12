@@ -44,8 +44,6 @@ class LoginActivity : BaseActivity() {
     private lateinit var managePermissions : ManagePermissions
     private val permissionList = listOf(
         Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_PHONE_STATE,
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.ACCESS_FINE_LOCATION
@@ -74,6 +72,9 @@ class LoginActivity : BaseActivity() {
         if(sharedPreference.getValueBoolean(Constant.IS_LOGIN,false)){
             startNewActivity(OptionActivity())
             finish()
+        }else{
+            managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
+            managePermissions.checkPermissions()
         }
 
         registerDeviceViewModel.registerDeviceResponse.observe(this, Observer {
@@ -103,10 +104,15 @@ class LoginActivity : BaseActivity() {
             }
         })
 
-        managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
-        managePermissions.checkPermissions()
+
 
         //Log.d(TAG,getDeviceIMEIId(this).toString())
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        //dialog.dismiss()
 
     }
 

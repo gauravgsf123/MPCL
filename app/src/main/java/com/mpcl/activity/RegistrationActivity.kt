@@ -75,8 +75,6 @@ class RegistrationActivity : BaseActivity() {
     private var path:String?=null
     private val permissionList = listOf(
         Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.ACCESS_FINE_LOCATION
     )
@@ -96,6 +94,9 @@ class RegistrationActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistrationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.appBar.ivHome.setOnClickListener {
+            onBackPressed()
+        }
 
         managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -295,9 +296,7 @@ class RegistrationActivity : BaseActivity() {
              LocationManager.NETWORK_PROVIDER
          )*/
         val manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            return true
-        } else return false
+        return manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
     @SuppressLint("MissingPermission")

@@ -60,9 +60,7 @@ class AcCopyUploadActivity : BaseActivity(),View.OnClickListener {
     private var path:String?=null
     private var selectedScanningSDK = BarcodeScanningActivity.ScannerSDK.MLKIT
     private val permissionList = listOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.CAMERA
     )
     var mediaPath: String = "/storage/emulated/0/Android/data/com.mpcl/files/Pictures/"
     private lateinit var barCodeViewModel: BarCodeViewModel
@@ -77,6 +75,9 @@ class AcCopyUploadActivity : BaseActivity(),View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityAcCopyUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.topBar.ivHome.setOnClickListener {
+            onBackPressed()
+        }
 
         barCodeRepository =  BarCodeRepository()
         barCodeViewModelFactory = BarCodeViewModelFactory(barCodeRepository)
